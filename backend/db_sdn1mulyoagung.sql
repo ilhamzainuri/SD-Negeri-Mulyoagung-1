@@ -21,17 +21,6 @@ SET time_zone = "+00:00";
 -- Database: `db_sdn1mulyoagung`
 --
 
-DROP TABLE IF EXISTS `berita`;
-DROP TABLE IF EXISTS `galeri`;
-DROP TABLE IF EXISTS `fasilitas`;
-DROP TABLE IF EXISTS `guru_tendik`;
-DROP TABLE IF EXISTS `hero_carousel`;
-DROP TABLE IF EXISTS `pengaturan_sekolah`;
-DROP TABLE IF EXISTS `pengumuman_penting`;
-DROP TABLE IF EXISTS `sambutan_kepsek`;
-DROP TABLE IF EXISTS `statistik_sekolah`;
-DROP TABLE IF EXISTS `users`;
-
 -- --------------------------------------------------------
 
 --
