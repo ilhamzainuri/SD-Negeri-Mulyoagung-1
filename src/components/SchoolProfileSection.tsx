@@ -45,15 +45,18 @@ export const SchoolProfileSection: React.FC = () => {
     fetchFacilities();
   }, []);
 
-  // Lock body scroll when modal is open
+  // Lock body & html scroll when modal is open
   useEffect(() => {
     if (selectedFacility) {
       document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
     } else {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
     }
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
     };
   }, [selectedFacility]);
 

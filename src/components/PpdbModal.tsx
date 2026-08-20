@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Sparkles, CheckCircle2, Download, Printer, FileText, ArrowRight } from 'lucide-react';
 import { PpdbApplication } from '../types';
 import logoImg from '../assets/logo.png';
@@ -23,6 +23,21 @@ export const PpdbModal: React.FC<PpdbModalProps> = ({ isOpen, onClose }) => {
   });
 
   const [submittedData, setSubmittedData] = useState<PpdbApplication | null>(null);
+
+  // Lock body & html scroll when modal is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+    };
+  }, [isOpen]);
 
   if (!isOpen) return null;
 

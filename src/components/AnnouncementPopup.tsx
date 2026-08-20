@@ -57,6 +57,21 @@ export const AnnouncementPopup: React.FC = () => {
     fetchAnnouncement();
   }, []);
 
+  // Lock body & html scroll when popup is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+    };
+  }, [isOpen]);
+
   const handleClose = () => {
     setIsOpen(false);
     sessionStorage.setItem(`seen_announcement_1`, 'true');

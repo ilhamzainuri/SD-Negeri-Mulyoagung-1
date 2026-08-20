@@ -21,6 +21,17 @@ SET time_zone = "+00:00";
 -- Database: `db_sdn1mulyoagung`
 --
 
+DROP TABLE IF EXISTS `berita`;
+DROP TABLE IF EXISTS `galeri`;
+DROP TABLE IF EXISTS `fasilitas`;
+DROP TABLE IF EXISTS `guru_tendik`;
+DROP TABLE IF EXISTS `hero_carousel`;
+DROP TABLE IF EXISTS `pengaturan_sekolah`;
+DROP TABLE IF EXISTS `pengumuman_penting`;
+DROP TABLE IF EXISTS `sambutan_kepsek`;
+DROP TABLE IF EXISTS `statistik_sekolah`;
+DROP TABLE IF EXISTS `users`;
+
 -- --------------------------------------------------------
 
 --
@@ -102,7 +113,7 @@ INSERT INTO `galeri` (`id`, `judul`, `deskripsi`, `foto`, `kategori`, `tanggal`,
 (6, 'Foto Bersama', 'Momen kebersamaan dan kekompakan para guru SD Negeri 1 Mulyoagung dalam suasana penuh keakraban dan kebahagiaan.', 'backend/uploads/galeri/1786499009_Dokumen dari Anisa Choirina(5).jpg', 'Kegiatan Sekolah', '2026-08-12', 'Verified', 2, ''),
 (7, 'Pembelajaran', '### Pembelajaran\r\n\r\nDokumentasi berbagai kegiatan pembelajaran siswa yang berlangsung secara aktif, kreatif, dan menyenangkan sebagai bagian dari proses pengembangan pengetahuan, keterampilan, dan karakter.', 'backend/uploads/galeri/1786500329_20260513_075756.jpg', 'Pembelajaran', '2026-08-12', 'Verified', 2, ''),
 (8, 'Pembelajaran', '### Pembelajaran\r\n\r\nDokumentasi berbagai kegiatan pembelajaran siswa yang berlangsung secara aktif, kreatif, dan menyenangkan sebagai bagian dari proses pengembangan pengetahuan, keterampilan, dan karakter.', 'backend/uploads/galeri/1786500381_20251025_082611.jpg', 'Pembelajaran', '2026-08-12', 'Verified', 2, ''),
-(9, 'Acara Studi Tiru Inovasi Sekolah', 'Dokumentasi kegiatan \"Studi Tiru Inovasi Sekolah\" yang bertujuan untuk memperluas wawasan, berbagi pengalaman, serta mempelajari berbagai program dan inovasi pendidikan guna meningkatkan kualitas pembelajaran dan pengelolaan sekolah.', 'backend/uploads/galeri/1786501375_Screenshot 2026-08-06 120707.png', 'Acara Khusus', '2026-08-12', 'Verified', 2, ''),
+(9, 'Acara Studi Tiru Inovasi Sekolah', 'Dokumentasi kegiatan "Studi Tiru Inovasi Sekolah" yang bertujuan untuk memperluas wawasan, berbagi pengalaman, serta mempelajari berbagai program dan inovasi pendidikan guna meningkatkan kualitas pembelajaran dan pengelolaan sekolah.', 'backend/uploads/galeri/1786501375_Screenshot 2026-08-06 120707.png', 'Acara Khusus', '2026-08-12', 'Verified', 2, ''),
 (10, 'Pramuka', 'Dokumentasi kegiatan Pramuka yang menampilkan semangat, kedisiplinan, kerja sama, dan kreativitas siswa dalam berbagai aktivitas kepramukaan.', 'backend/uploads/galeri/1786504109_20251023_101114.jpg', 'Ekstrakurikuler', '2026-08-12', 'Verified', 2, ''),
 (11, 'Karate', 'Menampilkan berbagai kegiatan ekstrakurikuler yang tersedia dan dapat diikuti oleh siswa sebagai bagian dari pengembangan bakat, minat, dan keterampilan.', 'backend/uploads/galeri/1786593452_88637573_20251023_090144.jpg', 'Ekstrakurikuler', '2026-08-12', 'Verified', 2, 'backend/uploads/galeri/1786593452_fd9da29e_20251023_090144.png'),
 (12, 'Lomba Seni dan Sastra', 'Dokumentasi kegiatan Lomba Seni dan Sastra yang menjadi wadah bagi siswa untuk menyalurkan kreativitas, mengembangkan bakat, serta mengekspresikan kemampuan dalam bidang seni dan sastra dengan penuh percaya diri.', 'backend/uploads/galeri/1786504127_20260414_141705.jpg', 'Prestasi', '2026-08-12', 'Verified', 2, '');
@@ -132,7 +143,7 @@ CREATE TABLE `guru_tendik` (
 --
 
 INSERT INTO `guru_tendik` (`id`, `nama`, `nip`, `jabatan`, `tugas`, `foto`, `riwayat_pendidikan`, `jenis_kelamin`, `status`, `motto`, `foto_crop`) VALUES
-(3, 'Soleh', NULL, 'Komite Sekolah', 'Komite Sekolah', 'backend/uploads/guru/1786069668_logoma.jpg', 'S1', 'Laki-laki', 'Aktif', '\"Bersama Maju, Bergandengan Tangan Menuju Sekolah Unggul.\"', ''),
+(3, 'Soleh', NULL, 'Komite Sekolah', 'Komite Sekolah', 'backend/uploads/guru/1786069668_logoma.jpg', 'S1', 'Laki-laki', 'Aktif', '"Bersama Maju, Bergandengan Tangan Menuju Sekolah Unggul."', ''),
 (4, 'AMALIA DYAH ERVIANA, S.Pd.', '198507172006042012', 'Kepala Sekolah', 'Kepala Sekolah', 'backend/uploads/guru/1786506232_Amalia_Dyah_Erviana.jpg', 'S1 (Sarjana Pendidikan)', 'Perempuan', 'Aktif', 'Berani berinovasi untuk pendidikan yang lebih bermakna.', 'backend/uploads/guru/1786506232_Amalia_Dyah_Erviana.png'),
 (5, 'ANISA CHOIRINA, S.Pd.', '-', 'Tata Usaha', 'Tata Usaha & Unit Perpustakaan', 'backend/uploads/guru/1786583610_07be63f3_Screenshot_2026-08-07_094553.png', 'S1 (Sarjana Pendidikan)', 'Perempuan', 'Aktif', 'p', 'backend/uploads/guru/1786583620_06139f89_1786583610_07be63f3_Screenshot_2026-08-07_094553.png'),
 (6, 'ZAINURI, M.Pd.', 'null', 'Guru Mata Pelajaran', 'Pendidikan Agama Islam', 'backend/uploads/guru/1786506315_zainuri.png', 'S2  (Magister Pendidikan)', 'Laki-laki', 'Aktif', 'p', ''),
@@ -206,7 +217,7 @@ INSERT INTO `pengaturan_sekolah` (`setting_key`, `setting_value`, `updated_at`) 
 ('alamat_sekolah', 'JL. RAYA MULYOAGUNG NO.121 RT. 1 RW. 10 DUSUN MULYOAGUNG , Kec. Dau, Kab. Malang, Prov. Jawa Timur', '2026-08-11 03:54:01'),
 ('email_sekolah', 'sdnmulyoagung01@gmail.com', '2026-08-11 03:54:01'),
 ('link_ppdb', 'https://sd-spmbmalangkab.id/', '2026-08-11 03:31:06'),
-('medsos_links', '[{\"id\":\"1\",\"name\":\"YouTube\",\"url\":\"https:\\/\\/www.youtube.com\\/@mulyoagungsatu3851\",\"icon\":\"auto\"},{\"id\":\"2\",\"name\":\"Instagram\",\"url\":\"https:\\/\\/www.instagram.com\\/mulyoagung1_dau\",\"icon\":\"auto\"},{\"id\":\"3\",\"name\":\"Facebook\",\"url\":\"https:\\/\\/www.facebook.com\\/profile.php?id=100085140035121\",\"icon\":\"auto\"},{\"id\":\"4\",\"name\":\"TikTok\",\"url\":\"https:\\/\\/www.tiktok.com\\/@mulyoagung.1\",\"icon\":\"auto\"}]', '2026-08-11 03:54:01'),
+('medsos_links', '[{"id":"1","name":"YouTube","url":"https:\\/\\/www.youtube.com\\/@mulyoagungsatu3851","icon":"auto"},{"id":"2","name":"Instagram","url":"https:\\/\\/www.instagram.com\\/mulyoagung1_dau","icon":"auto"},{"id":"3","name":"Facebook","url":"https:\\/\\/www.facebook.com\\/profile.php?id=100085140035121","icon":"auto"},{"id":"4","name":"TikTok","url":"https:\\/\\/www.tiktok.com\\/@mulyoagung.1","icon":"auto"}]', '2026-08-11 03:54:01'),
 ('tahun_ajaran', '2026/2027', '2026-08-07 01:59:45'),
 ('telepon_sekolah', '(0341) 466-730', '2026-08-11 03:54:01'),
 ('whatsapp_sekolah', '08123456789', '2026-08-11 03:54:01');
@@ -261,7 +272,7 @@ CREATE TABLE `sambutan_kepsek` (
 --
 
 INSERT INTO `sambutan_kepsek` (`id`, `nama`, `sambutan`, `foto`, `foto_crop`) VALUES
-(1, 'Amalia Dyah Erviana, S.Pd.', 'Assalamu\'alaikum Wr. Wb.\r\n\r\nSelamat datang di website resmi SD Negeri Mulyoagung 1. Kami berkomitmen memberikan pendidikan terbaik bagi putra-putri Anda, membimbing mereka menjadi generasi yang tidak hanya cerdas secara akademik, namun juga memiliki karakter dan budi pekerti yang luhur. \r\n\r\nMelalui semangat kebersamaan, inovasi pembelajaran berbasis digital, dan penguatan Profil Pelajar Pancasila, kami yakin dapat membentuk peserta didik yang siap menghadapi tantangan masa depan dengan tetap memegang teguh nilai-nilai keagamaan dan budaya bangsa. Melalui website ini, kami berharap dapat menjalin komunikasi yang lebih erat dengan seluruh masyarakat dan orang tua wali murid.', 'backend/uploads/sambutan/1786426193_Amalia Dyah Erviana.jpg', 'backend/uploads/sambutan/1786509156_de5c5ca1_1786426193_Amalia_Dyah_Erviana.png');
+(1, 'Amalia Dyah Erviana, S.Pd.', 'Assalamualaikum Wr. Wb.\r\n\r\nSelamat datang di website resmi SD Negeri Mulyoagung 1. Kami berkomitmen memberikan pendidikan terbaik bagi putra-putri Anda, membimbing mereka menjadi generasi yang tidak hanya cerdas secara akademik, namun juga memiliki karakter dan budi pekerti yang luhur. \r\n\r\nMelalui semangat kebersamaan, inovasi pembelajaran berbasis digital, dan penguatan Profil Pelajar Pancasila, kami yakin dapat membentuk peserta didik yang siap menghadapi tantangan masa depan dengan tetap memegang teguh nilai-nilai keagamaan dan budaya bangsa. Melalui website ini, kami berharap dapat menjalin komunikasi yang lebih erat dengan seluruh masyarakat dan orang tua wali murid.', 'backend/uploads/sambutan/1786426193_Amalia Dyah Erviana.jpg', 'backend/uploads/sambutan/1786509156_de5c5ca1_1786426193_Amalia_Dyah_Erviana.png');
 
 -- --------------------------------------------------------
 
@@ -318,7 +329,8 @@ INSERT INTO `users` (`id`, `username`, `password`, `role`, `nama_penanggung_jawa
 --
 ALTER TABLE `berita`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `uploaded_by` (`uploaded_by`);
+  ADD KEY `uploaded_by` (`uploaded_by`),
+  ADD KEY `idx_berita_status_tgl` (`status_verifikasi`,`tanggal` DESC,`id` DESC);
 
 --
 -- Indexes for table `fasilitas`
@@ -331,7 +343,8 @@ ALTER TABLE `fasilitas`
 --
 ALTER TABLE `galeri`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `uploaded_by` (`uploaded_by`);
+  ADD KEY `uploaded_by` (`uploaded_by`),
+  ADD KEY `idx_galeri_status_tgl` (`status_verifikasi`,`tanggal` DESC,`id` DESC);
 
 --
 -- Indexes for table `guru_tendik`
@@ -450,7 +463,3 @@ ALTER TABLE `berita`
 ALTER TABLE `galeri`
   ADD CONSTRAINT `galeri_ibfk_1` FOREIGN KEY (`uploaded_by`) REFERENCES `users` (`id`) ON DELETE SET NULL;
 COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
