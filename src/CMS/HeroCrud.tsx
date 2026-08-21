@@ -1,4 +1,4 @@
-﻿import React, { useEffect } from 'react';
+import React, { useEffect } from 'react';
 
 import { CmsToast } from './components/CmsToast';
 import { Sliders, Save, CheckCircle2, AlertCircle, Image as ImageIcon } from 'lucide-react';
@@ -89,15 +89,18 @@ export default function HeroCrud() {
               </div>
               <div>
                 <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                  Subjudul Hero
+                  Subjudul / Deskripsi Singkat Sekolah (Hero &amp; Footer)
                 </label>
                 <textarea
                   rows={4}
                   value={heroSubtitle}
                   onChange={(e) => setHeroSubtitle(e.target.value)}
-                  placeholder="Deskripsi singkat hero..."
+                  placeholder="Deskripsi singkat sekolah..."
                   className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-600 bg-white"
                 />
+                <p className="text-[10px] text-slate-500 mt-1">
+                  Teks deskripsi ini digunakan bersama dan akan tampil secara otomatis pada bagian Hero serta Footer.
+                </p>
               </div>
             </div>
           </div>

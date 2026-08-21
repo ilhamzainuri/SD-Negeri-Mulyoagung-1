@@ -63,7 +63,7 @@ export const KontenUtamaSection: React.FC<KontenUtamaSectionProps> = ({
 
           <div>
             <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-              Subjudul / Deskripsi Singkat Hero
+              Subjudul / Deskripsi Singkat Sekolah (Hero &amp; Footer)
             </label>
             <textarea
               rows={4}
@@ -72,6 +72,9 @@ export const KontenUtamaSection: React.FC<KontenUtamaSectionProps> = ({
               placeholder="Tuliskan deskripsi singkat pembuka sekolah..."
               className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-600 bg-white"
             />
+            <p className="text-[10px] text-slate-500 mt-1">
+              Teks deskripsi ini digunakan bersama dan akan tampil secara otomatis pada bagian Hero serta Footer.
+            </p>
           </div>
         </div>
 
