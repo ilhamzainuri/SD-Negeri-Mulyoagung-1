@@ -33,7 +33,9 @@ npm run lint      # tsc --noEmit (typecheck only)
   - Reads: `GET` (CMS/admin adds `?status=all` for unverified rows)
   - Writes: `POST` with `multipart/form-data` + `action` field (`create`/`update`/`delete`/`verify`)
   - Exceptions: `auth.php` and `users.php` read JSON from `php://input`
-- **Photo handling**: Use `backend/API/foto_helper.php` helpers (`foto_ensure_column`, `foto_handle_create`, `foto_handle_update`, `foto_map_rows`, `foto_unlink`)
+- **Photo handling**: Use `backend/API/foto_helper.php` helpers (`foto_handle_create`, `foto_handle_update`, `foto_map_rows`, `foto_unlink`; `foto_ensure_column` is a runtime no-op — migrations centralized in `fix_database.php`)
+- **Photo storage**: All uploads are auto-converted to **WebP** by `foto_convert_to_webp()` (in `foto_helper.php`) — supports PNG, JPG, JPEG, GIF, BMP, WBMP, WebP; resizes to max `FOTO_MAX_DIM` (1920px long side), deletes the original file
+- **Photo model**: two-column (`foto` = original, `foto_crop` = cropped); API GET returns crop if present, else original (via `foto_map_rows`). Note: `modul_pembelajaran` and `inovasi` use `foto_cover`/`foto_cover_crop`
 - **Uploads**: `backend/uploads/<entity>/`; rendered via `getImageUrl()` from `src/config/api.ts`
 
 ## Role-based access
@@ -60,5 +62,5 @@ npm run lint      # tsc --noEmit (typecheck only)
 
 - `backend/db_sdn1mulyoagung.sql` must be deleted from server after import (`.sql` in `.gitignore`)
 - Indonesian `.md` files in `src/CMS/*/*.md` are work notes, not docs
-- `README.md` and `metadata.json` are stale AI Studio boilerplate
+- `metadata.json` is stale AI Studio boilerplate
 - `scratch_check.ps1` is a one-off script
