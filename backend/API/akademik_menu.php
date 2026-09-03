@@ -5,53 +5,6 @@ header("Content-Type: application/json");
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Pragma: no-cache");
 
-try {
-    $conn->exec("CREATE TABLE IF NOT EXISTS `akademik_menu` (
-        `id` INT AUTO_INCREMENT PRIMARY KEY,
-        `label` VARCHAR(100) NOT NULL,
-        `deskripsi` TEXT NULL,
-        `parent_id` INT NULL DEFAULT NULL,
-        `link_gdrive` TEXT NULL,
-        `is_modul` TINYINT(1) NOT NULL DEFAULT 0,
-        `urutan` INT NOT NULL DEFAULT 0,
-        `aktif` TINYINT(1) NOT NULL DEFAULT 1,
-        `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;");
-
-    // Migrasi kolom parent_id (tabel lama tidak punya kolom ini)
-    $checkParent = $conn->query("SHOW COLUMNS FROM `akademik_menu` LIKE 'parent_id'");
-    if ($checkParent && $checkParent->rowCount() === 0) {
-        $conn->exec("ALTER TABLE `akademik_menu` ADD COLUMN `parent_id` INT NULL DEFAULT NULL AFTER `deskripsi`");
-    }
-    // Kolom link_gdrive mungkin NOT NULL di tabel lama; buat nullable agar kategori bisa tanpa link
-    try {
-        $conn->exec("ALTER TABLE `akademik_menu` MODIFY COLUMN `link_gdrive` TEXT NULL");
-    } catch (Exception $e) {
-        // abaikan
-    }
-
-    $count = $conn->query("SELECT COUNT(*) FROM `akademik_menu`")->fetchColumn();
-    if ($count == 0) {
-        $seeds = [
-            ['KSP', 'Kurikulum Satuan Pendidikan (KSP) SD Negeri 1 Mulyoagung.', null, 'https://drive.google.com/', 0, 1, 1],
-            ['PANDUAN KURIKULUM', 'Panduan pelaksanaan dan pedoman kurikulum pembelajaran sekolah.', null, 'https://drive.google.com/', 0, 2, 1],
-            ['ANALISIS HARI EFEKTIF', 'Analisis perhitungan alokasi waktu dan hari belajar efektif per semester.', null, 'https://drive.google.com/', 0, 3, 1],
-            ['BEDAH CP', 'Bedah Capaian Pembelajaran (CP) dan Alur Tujuan Pembelajaran (ATP).', null, 'https://drive.google.com/', 0, 4, 1],
-            ['PROGRAM TAHUNAN', 'Program Tahunan (Prota) rencana penetapan alokasi waktu 1 tahun ajaran.', null, 'https://drive.google.com/', 0, 5, 1],
-            ['PROGRAM SEMESTER', 'Program Semester (Promes) penjabaran rencana pembelajaran per semester.', null, 'https://drive.google.com/', 0, 6, 1],
-            ['MODUL AJAR & LKPD', 'Modul ajar, LKPD, dan materi Kurikulum Merdeka SD Negeri 1 Mulyoagung.', null, 'https://drive.google.com/', 1, 7, 1],
-            ['MPLS & ASESMEN', 'Masa Pengenalan Lingkungan Sekolah (MPLS) serta instrumen asesmen pembelajaran.', null, 'https://drive.google.com/', 0, 8, 1],
-        ];
-        $insertStmt = $conn->prepare("INSERT INTO `akademik_menu` (`label`, `deskripsi`, `parent_id`, `link_gdrive`, `is_modul`, `urutan`, `aktif`) VALUES (?, ?, ?, ?, ?, ?, ?)");
-        foreach ($seeds as $seed) {
-            $insertStmt->execute($seed);
-        }
-    }
-} catch (PDOException $e) {
-    // Continue
-}
-
 $method = $_SERVER['REQUEST_METHOD'];
 
 if ($method === 'GET') {

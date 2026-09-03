@@ -255,6 +255,11 @@ export const Hero: React.FC<HeroProps> = ({
                     <img
                       src={slide.image}
                       alt={slide.caption}
+                      width={1600}
+                      height={900}
+                      decoding="async"
+                      loading={index === 0 ? 'eager' : 'lazy'}
+                      fetchPriority={index === 0 ? 'high' : 'low'}
                       className={`w-full h-full object-cover rounded-2xl transform transition-transform duration-[6000ms] ease-out ${index === currentSlide ? 'scale-110' : 'scale-100'
                         }`}
                     />

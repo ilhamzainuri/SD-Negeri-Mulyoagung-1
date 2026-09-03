@@ -4,45 +4,10 @@ require_once 'foto_helper.php';
 
 header("Content-Type: application/json");
 
-foto_ensure_column($conn, 'fasilitas');
-
 // Ensure upload directory exists
 $upload_dir = '../uploads/fasilitas/';
 if (!file_exists($upload_dir)) {
     mkdir($upload_dir, 0777, true);
-}
-
-// Auto-create table if not exists
-try {
-    $conn->exec("CREATE TABLE IF NOT EXISTS `fasilitas` (
-      `id` int(11) NOT NULL AUTO_INCREMENT,
-      `judul` varchar(255) NOT NULL,
-      `deskripsi` text NOT NULL,
-      `foto` varchar(255) DEFAULT NULL,
-      `foto_crop` varchar(255) DEFAULT NULL,
-      PRIMARY KEY (`id`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;");
-
-    // Seed initial data if table is empty
-    $check_stmt = $conn->query("SELECT COUNT(*) as cnt FROM `fasilitas`");
-    $row = $check_stmt->fetch();
-    if ($row && intval($row['cnt']) === 0) {
-        $seeds = [
-            ['Laboratorium Komputer & TIK Interaktif', 'Dilengkapi 30 unit komputer terkini, jaringan Wi-Fi sekolah, dan Smart Display untuk pembelajaran coding dasar & literasi digital.', 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=600'],
-            ['Perpustakaan "Taman Ilmu"', 'Koleksi ribuan buku cerita, modul pembelajaran, koleksi literasi digital e-book, dan sudut baca ramah anak yang nyaman.', 'https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&q=80&w=600'],
-            ['Lapangan Olahraga & Upacara', 'Areal seluas 800m² dilapisi plester berkualitas untuk upacara bendera, senam bersama, bulutangkis, basket, dan futsal.', 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&q=80&w=600'],
-            ['Ruang UKS & Poliklinik Sekolah', 'Fasilitas pertolongan pertama kesehatan dengan tempat tidur bersih, pengukuran TB/BB rutin, dan kerja sama Puskesmas Dau.', 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=600'],
-            ['Kantin Sehat Bergizi', 'Menyediakan makanan dan minuman sehat yang higienis, bebas bahan pengawet berbahaya, dan diawasi oleh tim gizi sekolah.', 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&q=80&w=600'],
-            ['Taman Edukasi & Green House', 'Area hijau pemanfaatan hidroponik, tanaman toga, dan ruang pengolahan kompos sebagai wahana belajar Adiwiyata.', 'https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&fit=crop&q=80&w=600']
-        ];
-
-        $ins_stmt = $conn->prepare("INSERT INTO `fasilitas` (`judul`, `deskripsi`, `foto`) VALUES (?, ?, ?)");
-        foreach ($seeds as $s) {
-            $ins_stmt->execute($s);
-        }
-    }
-} catch (PDOException $e) {
-    // Continue even if table creation/check fails
 }
 
 $method = $_SERVER['REQUEST_METHOD'];

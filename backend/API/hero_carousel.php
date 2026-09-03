@@ -4,27 +4,11 @@ require_once 'foto_helper.php';
 
 header("Content-Type: application/json");
 
-foto_ensure_column($conn, 'hero_carousel');
-
 // Ensure upload directory exists for hero carousel
 $upload_dir = '../uploads/hero/';
 if (!file_exists($upload_dir)) {
     mkdir($upload_dir, 0777, true);
 }
-
-// Auto-migrate database table for hero carousel
-try {
-    $conn->exec("CREATE TABLE IF NOT EXISTS hero_carousel (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        foto VARCHAR(255) NOT NULL,
-        foto_crop VARCHAR(255) NULL,
-        caption VARCHAR(255) NOT NULL,
-        tag VARCHAR(100) DEFAULT 'Kegiatan Utama',
-        urutan INT DEFAULT 0,
-        is_active TINYINT DEFAULT 1,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
-} catch (Exception $e) {}
 
 $method = $_SERVER['REQUEST_METHOD'];
 

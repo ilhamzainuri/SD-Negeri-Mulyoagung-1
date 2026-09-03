@@ -4,22 +4,11 @@ require_once 'foto_helper.php';
 
 header("Content-Type: application/json");
 
-foto_ensure_column($conn, 'pengumuman_penting');
-
 // Ensure upload directory exists
 $upload_dir = '../uploads/pengumuman/';
 if (!file_exists($upload_dir)) {
     mkdir($upload_dir, 0777, true);
 }
-
-// Auto-migrate database table columns for date limits
-try {
-    $conn->exec("ALTER TABLE pengumuman_penting ADD COLUMN tanggal_mulai DATE NULL");
-} catch (Exception $e) {}
-
-try {
-    $conn->exec("ALTER TABLE pengumuman_penting ADD COLUMN tanggal_selesai DATE NULL");
-} catch (Exception $e) {}
 
 $method = $_SERVER['REQUEST_METHOD'];
 

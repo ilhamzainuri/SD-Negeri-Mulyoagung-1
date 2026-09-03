@@ -121,25 +121,81 @@ try {
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
     $response["tables_created_or_verified"][] = "statistik";
 
-    // 10. Tabel sambutan
-    $conn->exec("CREATE TABLE IF NOT EXISTS `sambutan` (
+    // 10. Tabel sambutan_kepsek
+    $conn->exec("CREATE TABLE IF NOT EXISTS `sambutan_kepsek` (
         `id` INT AUTO_INCREMENT PRIMARY KEY,
-        `nama_kepsek` VARCHAR(255) NOT NULL,
+        `nama` VARCHAR(255) NOT NULL,
         `sambutan` TEXT NOT NULL,
         `foto` VARCHAR(255) NULL,
         `foto_crop` VARCHAR(255) NULL
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
-    $response["tables_created_or_verified"][] = "sambutan";
+    $response["tables_created_or_verified"][] = "sambutan_kepsek";
 
     // 11. Tabel login_attempts
     $conn->exec("CREATE TABLE IF NOT EXISTS `login_attempts` (
         `id` INT AUTO_INCREMENT PRIMARY KEY,
         `ip_address` VARCHAR(45) NOT NULL,
-        `attempts` INT DEFAULT 0,
-        `last_attempt` INT DEFAULT 0,
-        `blocked_until` INT DEFAULT 0
+        `username` VARCHAR(100) NOT NULL DEFAULT '',
+        `attempted_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        INDEX idx_ip_time (ip_address, attempted_at)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
     $response["tables_created_or_verified"][] = "login_attempts";
+
+    // 12. Tabel inovasi
+    $conn->exec("CREATE TABLE IF NOT EXISTS `inovasi` (
+        `id` INT AUTO_INCREMENT PRIMARY KEY,
+        `judul` VARCHAR(255) NOT NULL,
+        `kategori` VARCHAR(100) NOT NULL,
+        `inovator` VARCHAR(150) NULL,
+        `deskripsi` TEXT NULL,
+        `link_drive` TEXT NOT NULL,
+        `foto_cover` VARCHAR(255) NULL,
+        `foto_cover_crop` VARCHAR(255) NULL,
+        `status` ENUM('Draft', 'Published') DEFAULT 'Published',
+        `status_verifikasi` ENUM('Pending', 'Verified', 'Rejected') DEFAULT 'Verified',
+        `uploaded_by` INT NULL,
+        `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+    $response["tables_created_or_verified"][] = "inovasi";
+
+    // 13. Tabel modul_pembelajaran
+    $conn->exec("CREATE TABLE IF NOT EXISTS `modul_pembelajaran` (
+        `id` INT AUTO_INCREMENT PRIMARY KEY,
+        `judul` VARCHAR(255) NOT NULL,
+        `deskripsi` TEXT NULL,
+        `mata_pelajaran` VARCHAR(100) NOT NULL,
+        `kelas` VARCHAR(50) NOT NULL,
+        `semester` VARCHAR(20) NOT NULL,
+        `tahun_ajaran` VARCHAR(20) NOT NULL,
+        `kategori` VARCHAR(100) NOT NULL,
+        `sumber_tipe` ENUM('upload', 'gdrive') NOT NULL,
+        `file_pdf` VARCHAR(255) NULL,
+        `link_gdrive` TEXT NULL,
+        `foto_cover` VARCHAR(255) NULL,
+        `foto_cover_crop` VARCHAR(255) NULL,
+        `status` ENUM('Draft', 'Published') DEFAULT 'Published',
+        `status_verifikasi` ENUM('Pending', 'Verified', 'Rejected') DEFAULT 'Verified',
+        `uploaded_by` INT NULL,
+        `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+    $response["tables_created_or_verified"][] = "modul_pembelajaran";
+
+    // 14. Tabel akademik_menu
+    $conn->exec("CREATE TABLE IF NOT EXISTS `akademik_menu` (
+        `id` INT AUTO_INCREMENT PRIMARY KEY,
+        `label` VARCHAR(100) NOT NULL,
+        `deskripsi` TEXT NULL,
+        `parent_id` INT NULL DEFAULT NULL,
+        `link_gdrive` TEXT NULL,
+        `is_modul` TINYINT(1) NOT NULL DEFAULT 0,
+        `urutan` INT NOT NULL DEFAULT 0,
+        `aktif` TINYINT(1) NOT NULL DEFAULT 1,
+        `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+    $response["tables_created_or_verified"][] = "akademik_menu";
 
     // Pastikan kolom-kolom opsional/terbaru ada di setiap tabel (SAFE ALTER)
     $safe_alters = [
@@ -154,13 +210,18 @@ try {
         ["guru_tendik", "foto_crop", "VARCHAR(255) NULL"],
         ["guru_tendik", "nip", "VARCHAR(100) NULL"],
         ["guru_tendik", "motto", "TEXT NULL"],
-        ["pengumuman", "foto_crop", "VARCHAR(255) NULL"],
+        ["pengumuman_penting", "foto_crop", "VARCHAR(255) NULL"],
+        ["pengumuman_penting", "tanggal_mulai", "DATE NULL"],
+        ["pengumuman_penting", "tanggal_selesai", "DATE NULL"],
         ["fasilitas", "foto_crop", "VARCHAR(255) NULL"],
         ["hero_carousel", "foto_crop", "VARCHAR(255) NULL"],
-        ["pengaturan_sekolah", "email_sekolah", "VARCHAR(255) NULL"],
-        ["pengaturan_sekolah", "telepon_sekolah", "VARCHAR(100) NULL"],
-        ["pengaturan_sekolah", "whatsapp_sekolah", "VARCHAR(100) NULL"],
-        ["pengaturan_sekolah", "alamat_sekolah", "TEXT NULL"],
+        ["hero_carousel", "caption", "VARCHAR(255) NOT NULL DEFAULT ''"],
+        ["hero_carousel", "tag", "VARCHAR(100) DEFAULT 'Kegiatan Utama'"],
+        ["hero_carousel", "is_active", "TINYINT DEFAULT 1"],
+        ["modul_pembelajaran", "deskripsi", "TEXT NULL"],
+        ["modul_pembelajaran", "status", "ENUM('Draft', 'Published') DEFAULT 'Published'"],
+        ["akademik_menu", "parent_id", "INT NULL DEFAULT NULL"],
+        ["akademik_menu", "link_gdrive", "TEXT NULL"],
     ];
 
     foreach ($safe_alters as $alt) {
@@ -170,6 +231,27 @@ try {
             $response["columns_added_or_verified"][] = "$tbl.$col";
         } catch (Exception $e) {
             // Kolom sudah ada
+        }
+    }
+
+    // Indeks performa database (composite index) untuk query yang sering dijalankan
+    $indexes = [
+        ["berita", "idx_berita_status_tgl", "status_verifikasi, tanggal DESC, id DESC"],
+        ["galeri", "idx_galeri_status_tgl", "status_verifikasi, tanggal DESC, id DESC"],
+        ["modul_pembelajaran", "idx_modul_status", "status_verifikasi, status, id DESC"],
+        ["inovasi", "idx_inovasi_status", "status_verifikasi, status, id DESC"],
+        ["akademik_menu", "idx_akademik_aktif", "aktif, parent_id, urutan, id"],
+        ["hero_carousel", "idx_hero_active", "is_active, urutan, id DESC"],
+        ["guru_tendik", "idx_guru_jabatan", "jabatan, id DESC"]
+    ];
+
+    foreach ($indexes as $idx) {
+        [$tbl, $idxName, $idxCols] = $idx;
+        try {
+            $conn->exec("ALTER TABLE `$tbl` ADD INDEX `$idxName` ($idxCols)");
+            $response["indexes_added_or_verified"][] = "$tbl.$idxName";
+        } catch (Exception $e) {
+            // Indeks sudah ada
         }
     }
 

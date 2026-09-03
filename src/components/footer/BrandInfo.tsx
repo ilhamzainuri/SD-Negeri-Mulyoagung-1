@@ -19,6 +19,9 @@ export const BrandInfo: React.FC<BrandInfoProps> = ({ onNavClick }) => {
         <div className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
           <img
             src={logoImg}
+            width={256}
+            height={256}
+            decoding="async"
             className="w-full h-full object-contain drop-shadow-md"
             alt="Logo SD Negeri 1 Mulyoagung"
           />

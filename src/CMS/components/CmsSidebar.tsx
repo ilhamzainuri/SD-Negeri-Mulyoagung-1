@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import { getImageUrl } from '../../config/api';
 import { UserSession, CmsTab } from '../types';
-import logoImg from '../../assets/images/logo.png';
+import logoImg from '../../assets/logo.png';
 
 interface CmsSidebarProps {
   user: UserSession;

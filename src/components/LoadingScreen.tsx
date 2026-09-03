@@ -53,6 +53,8 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({
             <img
               src={logoImg}
               alt="Logo SD Negeri 1 Mulyoagung"
+              width={256}
+              height={256}
               className="w-full h-full object-contain animate-soft-pulse drop-shadow-sm"
               loading="eager"
             />

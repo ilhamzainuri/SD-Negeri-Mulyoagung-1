@@ -11,7 +11,7 @@ $allowedOrigins = [
     'http://localhost',
     'http://127.0.0.1',
     'http://127.0.0.1:3000',
-    // 'https://sdn1mulyoagung.sch.id',  // aktifkan untuk produksi
+    'https://sdn1mulyoagung.sch.id'
 ];
 
 // ---- Cek 1: Tolak navigasi langsung browser ----
@@ -67,9 +67,11 @@ $password = getenv('DB_PASS') !== false ? getenv('DB_PASS') : "";
 $database = getenv('DB_NAME') ?: "db_sdn1mulyoagung";
 
 try {
-    $conn = new PDO("mysql:host=$host;dbname=$database;charset=utf8mb4", $username, $password);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+    $conn = new PDO("mysql:host=$host;dbname=$database;charset=utf8mb4", $username, $password, [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_EMULATE_PREPARES => false,
+    ]);
 } catch (PDOException $e) {
     http_response_code(500);
     echo json_encode(["status" => "error", "message" => "Database connection failed: " . $e->getMessage()]);

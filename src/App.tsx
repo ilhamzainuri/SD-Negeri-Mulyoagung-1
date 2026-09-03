@@ -14,7 +14,7 @@ import {
   Navigate
 } from 'react-router-dom';
 import AOS from 'aos';
-import 'aos/dist/aos.css'; 
+import 'aos/dist/aos.css';
 import { NavTab } from './types';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
@@ -112,6 +112,8 @@ function AppContent() {
       offset: 30,
       debounceDelay: 50,
       throttleDelay: 99,
+      // Nonaktifkan animasi di perangkat mobile untuk performa
+      disable: window.innerWidth < 768 || window.matchMedia('(prefers-reduced-motion: reduce)').matches,
     });
 
     const handleWindowResize = () => {

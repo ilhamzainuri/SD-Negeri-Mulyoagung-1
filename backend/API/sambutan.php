@@ -4,8 +4,6 @@ require_once 'foto_helper.php';
 
 header("Content-Type: application/json");
 
-foto_ensure_column($conn, 'sambutan_kepsek');
-
 // Ensure upload directory exists
 $upload_dir = '../uploads/sambutan/';
 if (!file_exists($upload_dir)) {

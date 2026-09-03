@@ -6,8 +6,6 @@ header("Content-Type: application/json");
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Pragma: no-cache");
 
-foto_ensure_column($conn, 'galeri');
-
 $upload_dir = '../uploads/galeri/';
 if (!file_exists($upload_dir)) {
     mkdir($upload_dir, 0777, true);

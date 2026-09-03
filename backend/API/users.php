@@ -4,12 +4,6 @@ require_once 'foto_helper.php';
 
 header("Content-Type: application/json");
 
-foto_ensure_column($conn, 'users');
-
-try {
-    $conn->exec("ALTER TABLE users DROP COLUMN password_plain");
-} catch (Exception $e) {}
-
 $upload_dir = '../uploads/profile/';
 if (!file_exists($upload_dir)) {
     mkdir($upload_dir, 0777, true);

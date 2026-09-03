@@ -16,82 +16,23 @@
  *   - Update tanpa `foto_original` berarti hanya crop ulang (foto asli dipertahankan).
  */
 
-// Tambahkan kolom foto_crop, status_verifikasi, dan uploaded_by jika belum ada (migrasi otomatis).
-function foto_ensure_column($conn, $table) {
-    try {
-        $conn->exec("ALTER TABLE `$table` ADD COLUMN foto_crop VARCHAR(255) NULL");
-    } catch (Exception $e) {
-        // Kolom sudah ada.
-    }
-    try {
-        $conn->exec("ALTER TABLE `$table` ADD COLUMN status_verifikasi VARCHAR(50) DEFAULT 'Verified'");
-    } catch (Exception $e) {
-        // Kolom sudah ada.
-    }
-    try {
-        $conn->exec("ALTER TABLE `$table` ADD COLUMN uploaded_by INT NULL");
-    } catch (Exception $e) {
-        // Kolom sudah ada.
-    }
-    try {
-        $conn->exec("UPDATE `$table` SET status_verifikasi = 'Verified' WHERE status_verifikasi IS NULL OR status_verifikasi = ''");
-    } catch (Exception $e) {
-        // Ignore
-    }
-    try {
-        // Perbaiki baris lama yang korup (nama file foto_crop sama dengan foto karena
-        // tabrakan nama saat upload). Kosongkan foto_crop agar foto asli dipertahankan.
-        $conn->exec("UPDATE `$table` SET foto_crop = NULL WHERE foto_crop IS NOT NULL AND foto_crop = foto");
-    } catch (Exception $e) {
-        // Kolom belum tersedia.
-    }
+// Migrasi kolom dilakukan terpusat di fix_database.php (no-op di runtime untuk performa).
+function foto_ensure_column($conn, $table, ...$args) {
+    // No-op di hot-path request untuk mengeliminasi metadata lock & ALTER TABLE overhead
 }
 
-// Cek dan dapatkan path file yang benar-benar ada di disk (dengan fallback ekstensi webp/jpg/png).
+// Kembalikan path foto langsung tanpa overhead disk I/O di setiap GET request
 function foto_resolve_existing_path($path) {
-    if (empty($path)) return '';
-    // Jika URL eksternal, langsung kembalikan
-    if (strpos($path, 'http://') === 0 || strpos($path, 'https://') === 0) {
-        return $path;
-    }
-    $relative = '../' . str_replace('backend/', '', $path);
-    if (file_exists($relative)) {
-        return $path;
-    }
-    // Cek jika versi webp ada
-    $webpPath = preg_replace('/\.(png|jpe?g)$/i', '.webp', $relative);
-    if (file_exists($webpPath)) {
-        return str_replace(basename($relative), basename($webpPath), $path);
-    }
-    // Cek kemungkinan ekstensi lain yang ada di disk
-    $baseWithoutExt = preg_replace('/\.[^.]+$/', '', $relative);
-    foreach (['.webp', '.jpg', '.jpeg', '.png', '.JPG', '.PNG', '.JPEG'] as $candidateExt) {
-        if (file_exists($baseWithoutExt . $candidateExt)) {
-            return str_replace(basename($relative), basename($baseWithoutExt . $candidateExt), $path);
-        }
-    }
-    return $path;
+    return $path ?? '';
 }
 
-// Ubah satu baris hasil query: isi `foto` = tampilan, tambahkan `foto_original`.
+// Ubah satu baris hasil query: isi `foto` = tampilan (crop jika ada, else original), simpan `foto_original`.
 function foto_map_row(&$row) {
     $original = $row['foto'] ?? '';
     $crop = $row['foto_crop'] ?? '';
 
-    $resolved_original = foto_resolve_existing_path($original);
-    $resolved_crop = foto_resolve_existing_path($crop);
-
-    $row['foto_original'] = !empty($resolved_original) ? $resolved_original : $original;
-
-    if (!empty($resolved_crop)) {
-        $row['foto'] = $resolved_crop;
-    } elseif (!empty($resolved_original)) {
-        $row['foto'] = $resolved_original;
-    } elseif (!empty($crop)) {
-        $row['foto'] = $crop;
-    } else {
-        $row['foto'] = $original;
-    }
+    $row['foto_original'] = $original;
+    $row['foto'] = (!empty($crop)) ? $crop : $original;
 }
 
 // Ubah banyak baris hasil query (mengambil referensi langsung).
@@ -137,7 +78,42 @@ function foto_unlink($path) {
     }
 }
 
-// Konversi PNG / JPG ke WebP (runtime optimization).
+// Dimensi maksimum sisi terpanjang untuk foto yang disimpan (dalam px).
+define('FOTO_MAX_DIM', 1920);
+
+// Muat file gambar menjadi resource GD (mendukung PNG, JPG, GIF, BMP, WBMP, WebP).
+function foto_load_gd($fullpath, $ext) {
+    switch ($ext) {
+        case 'png':
+            if (!function_exists('imagecreatefrompng')) return null;
+            $img = @imagecreatefrompng($fullpath);
+            if ($img) {
+                @imagepalettetotruecolor($img);
+                @imagealphablending($img, true);
+                @imagesavealpha($img, true);
+            }
+            return $img;
+        case 'jpg':
+        case 'jpeg':
+            if (!function_exists('imagecreatefromjpeg')) return null;
+            return @imagecreatefromjpeg($fullpath);
+        case 'gif':
+            if (!function_exists('imagecreatefromgif')) return null;
+            return @imagecreatefromgif($fullpath);
+        case 'bmp':
+            if (!function_exists('imagecreatefrombmp')) return null;
+            return @imagecreatefrombmp($fullpath);
+        case 'wbmp':
+            if (!function_exists('imagecreatefromwbmp')) return null;
+            return @imagecreatefromwbmp($fullpath);
+        case 'webp':
+            if (!function_exists('imagecreatefromwebp')) return null;
+            return @imagecreatefromwebp($fullpath);
+    }
+    return null;
+}
+
+// Konversi semua format gambar didukung ke WebP + resize ke ukuran wajar (runtime optimization).
 function foto_convert_to_webp($filepath) {
     if (empty($filepath)) return $filepath;
 
@@ -147,34 +123,45 @@ function foto_convert_to_webp($filepath) {
     }
 
     $ext = strtolower(pathinfo($filepath, PATHINFO_EXTENSION));
-    if ($ext !== 'png' && $ext !== 'jpg' && $ext !== 'jpeg') return $filepath;
-    
+    $supported = ['png', 'jpg', 'jpeg', 'gif', 'bmp', 'wbmp', 'webp'];
+    if (!in_array($ext, $supported, true)) return $filepath;
+
     $fullpath = '../' . str_replace('backend/', '', $filepath);
     if (!file_exists($fullpath)) return $filepath;
-    
+
     try {
-        $img = null;
-        if ($ext === 'png' && function_exists('imagecreatefrompng')) {
-            $img = @imagecreatefrompng($fullpath);
-            if ($img) {
-                if (function_exists('imagepalettetotruecolor')) {
-                    @imagepalettetotruecolor($img);
-                }
-                @imagealphablending($img, true);
-                @imagesavealpha($img, true);
-            }
-        } elseif (($ext === 'jpg' || $ext === 'jpeg') && function_exists('imagecreatefromjpeg')) {
-            $img = @imagecreatefromjpeg($fullpath);
-        }
-        
+        $img = foto_load_gd($fullpath, $ext);
         if (!$img) return $filepath;
-        
-        $webpPath = preg_replace('/\.(png|jpe?g)$/i', '.webp', $fullpath);
-        $saved = @imagewebp($img, $webpPath, 85);
-        if (function_exists('imagedestroy')) {
+
+        // Pastikan truecolor: imagewebp tidak mendukung palette image (mis. GIF).
+        if (!imageistruecolor($img)) {
+            @imagepalettetotruecolor($img);
+        }
+
+        // Resize jika sisi terpanjang melebihi batas (hemat payload, tetap cukup untuk crop ulang).
+        $w = imagesx($img);
+        $h = imagesy($img);
+        $max = max($w, $h);
+        if ($max > FOTO_MAX_DIM) {
+            $scale = FOTO_MAX_DIM / $max;
+            $nw = (int) round($w * $scale);
+            $nh = (int) round($h * $scale);
+            $resized = imagecreatetruecolor($nw, $nh);
+            if ($ext === 'png' || $ext === 'webp' || $ext === 'gif') {
+                @imagealphablending($resized, false);
+                @imagesavealpha($resized, true);
+            }
+            @imagecopyresampled($resized, $img, 0, 0, 0, 0, $nw, $nh, $w, $h);
+            @imagedestroy($img);
+            $img = $resized;
+        }
+
+        $webpPath = preg_replace('/\.(png|jpe?g|gif|bmp|wbmp|webp)$/i', '.webp', $fullpath);
+        $saved = @imagewebp($img, $webpPath, 82);
+        if ($img) {
             @imagedestroy($img);
         }
-        
+
         if ($saved && file_exists($webpPath) && filesize($webpPath) > 0) {
             @unlink($fullpath);
             return str_replace(basename($filepath), basename($webpPath), $filepath);
@@ -182,7 +169,7 @@ function foto_convert_to_webp($filepath) {
     } catch (Throwable $e) {
         // Ignore conversion errors, keep original
     }
-    
+
     return $filepath;
 }
 

@@ -6,8 +6,6 @@ header("Content-Type: application/json");
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Pragma: no-cache");
 
-foto_ensure_column($conn, 'berita');
-
 $upload_dir = '../uploads/berita/';
 if (!file_exists($upload_dir)) {
     mkdir($upload_dir, 0777, true);

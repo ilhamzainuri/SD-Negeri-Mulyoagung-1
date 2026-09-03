@@ -4,8 +4,6 @@ require_once 'foto_helper.php';
 
 header("Content-Type: application/json");
 
-foto_ensure_column($conn, 'guru_tendik');
-
 $upload_dir = '../uploads/guru/';
 if (!file_exists($upload_dir)) {
     mkdir($upload_dir, 0777, true);

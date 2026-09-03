@@ -220,3 +220,13 @@
     animation: none !important;
   }
 }
+
+/* Ringankan backdrop-filter di mobile untuk hemat GPU */
+@media (max-width: 768px) {
+  .glass-card,
+  .apple-glass-card,
+  .gray-liquid-glass {
+    backdrop-filter: blur(8px) saturate(120%);
+    -webkit-backdrop-filter: blur(8px) saturate(120%);
+  }
+}

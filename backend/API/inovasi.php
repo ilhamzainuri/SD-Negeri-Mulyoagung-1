@@ -6,30 +6,6 @@ header("Content-Type: application/json");
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Pragma: no-cache");
 
-// Ensure table exists
-try {
-    $conn->exec("CREATE TABLE IF NOT EXISTS `inovasi` (
-        `id` INT AUTO_INCREMENT PRIMARY KEY,
-        `judul` VARCHAR(255) NOT NULL,
-        `kategori` VARCHAR(100) NOT NULL,
-        `inovator` VARCHAR(150) NULL,
-        `deskripsi` TEXT NULL,
-        `link_drive` TEXT NOT NULL,
-        `foto_cover` VARCHAR(255) NULL,
-        `foto_cover_crop` VARCHAR(255) NULL,
-        `status` ENUM('Draft', 'Published') DEFAULT 'Published',
-        `status_verifikasi` ENUM('Pending', 'Verified', 'Rejected') DEFAULT 'Verified',
-        `uploaded_by` INT NULL,
-        `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;");
-
-    // Ensure columns exist if table was previously created
-    foto_ensure_column($conn, 'inovasi', 'foto_cover', 'foto_cover_crop');
-} catch (PDOException $e) {
-    // Continue
-}
-
 $upload_cover_dir = '../uploads/inovasi/cover/';
 
 if (!file_exists($upload_cover_dir)) {

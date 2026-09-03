@@ -5,8 +5,6 @@ require_once 'rate_limiter.php';
 
 header("Content-Type: application/json");
 
-foto_ensure_column($conn, 'users');
-
 // Helper to get JSON input
 $input = json_decode(file_get_contents('php://input'), true);
 if (!$input) {

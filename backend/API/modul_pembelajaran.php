@@ -6,47 +6,6 @@ header("Content-Type: application/json");
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Pragma: no-cache");
 
-// Ensure table exists
-try {
-    $conn->exec("CREATE TABLE IF NOT EXISTS `modul_pembelajaran` (
-        `id` INT AUTO_INCREMENT PRIMARY KEY,
-        `judul` VARCHAR(255) NOT NULL,
-        `deskripsi` TEXT NULL,
-        `mata_pelajaran` VARCHAR(100) NOT NULL,
-        `kelas` VARCHAR(50) NOT NULL,
-        `semester` VARCHAR(20) NOT NULL,
-        `tahun_ajaran` VARCHAR(20) NOT NULL,
-        `kategori` VARCHAR(100) NOT NULL,
-        `sumber_tipe` ENUM('upload', 'gdrive') NOT NULL,
-        `file_pdf` VARCHAR(255) NULL,
-        `link_gdrive` TEXT NULL,
-        `foto_cover` VARCHAR(255) NULL,
-        `foto_cover_crop` VARCHAR(255) NULL,
-        `status` ENUM('Draft', 'Published') DEFAULT 'Published',
-        `status_verifikasi` ENUM('Pending', 'Verified', 'Rejected') DEFAULT 'Verified',
-        `uploaded_by` INT NULL,
-        `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;");
-
-    // Ensure columns exist if table was previously created
-    foto_ensure_column($conn, 'modul_pembelajaran', 'foto_cover', 'foto_cover_crop');
-
-    // Ensure deskripsi column exists
-    $checkDeskripsi = $conn->query("SHOW COLUMNS FROM `modul_pembelajaran` LIKE 'deskripsi'");
-    if ($checkDeskripsi && $checkDeskripsi->rowCount() === 0) {
-        $conn->exec("ALTER TABLE `modul_pembelajaran` ADD COLUMN `deskripsi` TEXT NULL AFTER `judul`");
-    }
-
-    // Ensure status column exists
-    $checkCol = $conn->query("SHOW COLUMNS FROM `modul_pembelajaran` LIKE 'status'");
-    if ($checkCol && $checkCol->rowCount() === 0) {
-        $conn->exec("ALTER TABLE `modul_pembelajaran` ADD COLUMN `status` ENUM('Draft', 'Published') DEFAULT 'Published' AFTER `foto_cover_crop`");
-    }
-} catch (PDOException $e) {
-    // Continue
-}
-
 $upload_cover_dir = '../uploads/modul/cover/';
 $upload_pdf_dir = '../uploads/modul/pdf/';
 

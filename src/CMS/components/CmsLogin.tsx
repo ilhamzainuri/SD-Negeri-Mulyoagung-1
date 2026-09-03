@@ -3,7 +3,7 @@ import { ArrowLeft, School, Eye, EyeOff, RotateCw, ShieldAlert, Clock } from 'lu
 import { getApiBaseUrl } from '../../config/api';
 import { UserSession } from '../types';
 import heroImg1 from '../../assets/images/img2.webp';
-import logoImg from '../../assets/images/logo.png';
+import logoImg from '../../assets/logo.png';
 
 interface CmsLoginProps {
     onLoginSuccess: (user: UserSession) => void;

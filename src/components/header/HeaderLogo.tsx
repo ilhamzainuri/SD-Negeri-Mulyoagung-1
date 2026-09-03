@@ -23,6 +23,9 @@ export const HeaderLogo: React.FC<HeaderLogoProps> = ({ onClick }) => (
     <div className="w-9 h-9 sm:w-10 sm:h-10 lg:w-11 lg:h-11 xl:w-10 2xl:w-11 xl:h-10 2xl:h-11 flex items-center justify-center group-hover:scale-105 transition-transform duration-200 shrink-0">
       <img
         src={logoImg}
+        width={256}
+        height={256}
+        decoding="async"
         className="w-full h-full object-contain drop-shadow-md"
         alt="Logo SD Negeri 1 Mulyoagung"
       />
