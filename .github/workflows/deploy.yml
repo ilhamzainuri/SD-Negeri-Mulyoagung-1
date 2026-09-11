@@ -1,0 +1,58 @@
+name: Deploy SDN 1 Mulyoagung Website to Hostinger
+
+on:
+  push:
+    branches:
+      - prodtest # Ubah ke 'master' jika nama branch utama Anda master
+
+jobs:
+  build-and-deploy:
+    name: Build & Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout Kode dari Repo
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # Step 2: Setup Node.js Environment
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # Step 3: Install Dependencies & Build Frontend (Vite)
+      - name: Install & Build React Frontend
+        env:
+          VITE_API_BASE_URL: https://test.uydapz.site # Ganti ke https://sdn1mulyoagung.sch.id saat Rilis Produksi
+        run: |
+          npm ci
+          npm run build
+
+      # Step 4: Deploy Frontend (Isi folder dist/) ke root public_html
+      - name: Deploy Frontend (dist) via FTP
+        uses: SamKirsch/ftp-deploy-action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./dist/
+          server-dir: ./public_html/
+          exclude: |
+            **/.git*
+            **/.git*/**
+
+      # Step 5: Deploy Backend (Isi folder backend/) ke public_html/backend/
+      - name: Deploy Backend PHP via FTP
+        uses: SamKirsch/ftp-deploy-action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./backend/
+          server-dir: ./public_html/backend/
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/db_sdn1.sql
+            **/uploads/** # Agar gambar ter-upload di hosting tidak terhapus/tertimpa saat auto deploy
