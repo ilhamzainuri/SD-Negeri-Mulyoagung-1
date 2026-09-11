@@ -3,7 +3,7 @@ name: Deploy SDN 1 Mulyoagung Website to Hostinger
 on:
   push:
     branches:
-      - prodtest # Ubah ke 'master' jika nama branch utama Anda master
+      - prodtest # Ubah ke 'main' saat production asli
 
 jobs:
   build-and-deploy:
@@ -19,7 +19,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: "20"
 
       # Step 3: Install Dependencies & Build Frontend (Vite)
       - name: Install & Build React Frontend
