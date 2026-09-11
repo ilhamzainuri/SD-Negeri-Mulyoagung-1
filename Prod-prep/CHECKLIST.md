@@ -1,11 +1,12 @@
 # 📋 Checklist Deployment Produksi
+
 ## SD Negeri 1 Mulyoagung
 
 ### Persiapan (Sebelum Upload)
 
 - [ ] 1. Build frontend: `npm run build` — hasil di `dist/`
-- [ ] 2. Database baru di server: `db_sdn1mulyoagung`
-- [ ] 3. Import SQL: `backend/db_sdn1mulyoagung.sql`
+- [ ] 2. Database baru di server: `db_sdn1`
+- [ ] 3. Import SQL: `backend/db_sdn1.sql`
 - [ ] 4. Backup folder `backend/uploads/` dari lokal
 - [ ] 5. Cek domain: `sdn1mulyoagung.sch.id` atau custom domain
 
@@ -31,7 +32,7 @@
 - [ ] 16. Upload `.htaccess` di root server (React Router)
 - [ ] 17. Upload `.htaccess` di `backend/` (security headers)
 - [ ] 18. File `.env` di server dengan `DB_HOST`, `DB_USER`, `DB_PASS`, `DB_NAME`
-- [ ] 19. Hapus `backend/db_sdn1mulyoagung.sql` dari server
+- [ ] 19. Hapus `backend/db_sdn1.sql` dari server
 - [ ] 20. Hapus `src/`, `node_modules/`, `vite.config.ts` dari server
 
 ---
@@ -85,9 +86,10 @@
 
 ---
 
-*Last updated: 2026-08-20*
+_Last updated: 2026-08-20_
 
 ## Catatan
+
 - Kerjakan checklist **secara berurutan**
 - Jangan skip security checks (CORS, HTTPS, .env)
 - Test di browser incognito untuk clean cache

@@ -1,4 +1,5 @@
 # 🚀 Panduan Deployment Produksi
+
 ## SD Negeri 1 Mulyoagung — React + PHP/MySQL
 
 > Dokumen ini berisi langkah-langkah yang **WAJIB** dilakukan sebelum website dijalankan di server publik.
@@ -20,10 +21,10 @@ Hasilnya ada di folder `dist/`. Upload isi folder `dist/` ke **root public** ser
 
 ## 2. Database MySQL
 
-1. Buat database baru di server: `db_sdn1mulyoagung`
+1. Buat database baru di server: `db_sdn1`
 2. Import file SQL via phpMyAdmin:
    ```
-   backend/db_sdn1mulyoagung.sql
+   backend/db_sdn1.sql
    ```
 3. Setelah berhasil diimport, **hapus file `.sql` dari server**.
 
@@ -51,6 +52,7 @@ $allowedOrigins = [
 File ini sudah otomatis mendeteksi domain `*.sch.id`. Tidak perlu diubah jika domain menggunakan `sch.id`.
 
 Alternatif — buat file `.env.production`:
+
 ```env
 VITE_API_BASE_URL=https://sdn1mulyoagung.sch.id
 ```
@@ -79,7 +81,7 @@ Atur di **cPanel → Environment Variables** atau file `.env` di server:
 DB_HOST=localhost
 DB_USER=nama_user_db
 DB_PASS=password_db_yang_kuat
-DB_NAME=db_sdn1mulyoagung
+DB_NAME=db_sdn1
 ```
 
 > [!CAUTION]
@@ -90,10 +92,12 @@ DB_NAME=db_sdn1mulyoagung
 ## 7. HTTPS / SSL
 
 Di cPanel:
+
 - Aktifkan **Let's Encrypt SSL** (gratis)
 - Aktifkan **Force HTTPS Redirect**
 
 Pastikan `$allowedOrigins` di `koneksi.php` menggunakan `https://`:
+
 ```php
 'https://sdn1mulyoagung.sch.id'  // bukan http://
 ```
@@ -102,14 +106,14 @@ Pastikan `$allowedOrigins` di `koneksi.php` menggunakan `https://`:
 
 ## 8. File yang Harus Dihapus / Tidak Diupload
 
-| File/Folder | Tindakan |
-|---|---|
-| `backend/db_sdn1mulyoagung.sql` | **Hapus** setelah import |
-| `node_modules/` | **Jangan upload** |
-| `src/` | **Jangan upload** (upload `dist/` saja) |
-| `.env*` | **Jangan upload** |
-| `scratch_check.ps1` | **Hapus** dari server |
-| `PRODUKSI.md` | Opsional dihapus setelah dibaca |
+| File/Folder           | Tindakan                                |
+| --------------------- | --------------------------------------- |
+| `backend/db_sdn1.sql` | **Hapus** setelah import                |
+| `node_modules/`       | **Jangan upload**                       |
+| `src/`                | **Jangan upload** (upload `dist/` saja) |
+| `.env*`               | **Jangan upload**                       |
+| `scratch_check.ps1`   | **Hapus** dari server                   |
+| `PRODUKSI.md`         | Opsional dihapus setelah dibaca         |
 
 ---
 
@@ -145,4 +149,4 @@ Ini agar route seperti `/cms`, `/berita`, `/galeri` tidak 404 saat di-refresh.
 
 ---
 
-*Terakhir diperbarui: 2026-08-20*
+_Terakhir diperbarui: 2026-08-20_

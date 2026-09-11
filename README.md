@@ -8,7 +8,7 @@ Portal resmi SD Negeri 1 Mulyoagung, Kabupaten Malang. Website informasi sekolah
 | -------- | --------------------------------------------------------------------- |
 | Frontend | React 19 + Vite + TypeScript + Tailwind CSS 4                         |
 | Backend  | PHP + MySQL (PDO), dijalankan via XAMPP Apache                         |
-| Database | `db_sdn1mulyoagung` (MySQL)                                            |
+| Database | `db_sdn1` (MySQL)                                            |
 
 ## Struktur
 
@@ -23,7 +23,7 @@ Portal resmi SD Negeri 1 Mulyoagung, Kabupaten Malang. Website informasi sekolah
 │  ├─ API/         # Endpoint REST (newsAPI.php, galeri.php, guru.php, dll.)
 │  ├─ config/      # Koneksi DB (koneksi.php)
 │  ├─ uploads/     # File foto ter upload (selalu WebP)
-│  └─ db_sdn1mulyoagung.sql  # Dump DB (hapus dari server setelah import)
+│  └─ db_sdn1.sql  # Dump DB (hapus dari server setelah import)
 └─ index.html      # Entry point Vite
 ```
 
@@ -31,7 +31,7 @@ Portal resmi SD Negeri 1 Mulyoagung, Kabupaten Malang. Website informasi sekolah
 
 **Prasyarat:** Node.js, XAMPP (Apache + MySQL aktif).
 
-1. **Database** — Import `backend/db_sdn1mulyoagung.sql` ke MySQL DB `db_sdn1mulyoagung` (mis. via phpMyAdmin).
+1. **Database** — Import `backend/db_sdn1.sql` ke MySQL DB `db_sdn1` (mis. via phpMyAdmin).
 2. **Environment** — Atur env vars `DB_HOST` / `DB_USER` / `DB_PASS` / `DB_NAME` (default: `localhost` / `root` / password kosong).
 3. **Install & jalankan:**
 
