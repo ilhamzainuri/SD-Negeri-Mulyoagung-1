@@ -69,7 +69,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'OPTIONS') {
 
 $host     = "localhost";
 $username = "u875837380_root";
-$password = "sdn1mulyoagung";
+$password = "SDN1mulyoagung";
 $database = "u875837380_db_sdn1";
 
 try {
