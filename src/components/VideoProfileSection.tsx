@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Play, PlayCircle, X, ExternalLink } from 'lucide-react';
 import { useHomepageConfig } from '../hooks/useHomepageConfig';
+import defaultPoster from '../assets/images/img2.webp';
 
 export const VideoProfileSection: React.FC = () => {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [thumbError, setThumbError] = useState(false);
   const homepageConfig = useHomepageConfig();
 
   const getYoutubeId = (url: string) => {
@@ -75,7 +77,7 @@ export const VideoProfileSection: React.FC = () => {
           {isPlaying ? (
             <div className="w-full h-full relative">
               <iframe
-                src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
+                src={`https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0`}
                 title="Video Profil"
                 className="w-full h-full border-0 absolute inset-0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -93,7 +95,8 @@ export const VideoProfileSection: React.FC = () => {
           ) : (
             <div className="w-full h-full relative group cursor-pointer" onClick={() => setIsPlaying(true)}>
               <img
-                src={`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`}
+                src={thumbError ? defaultPoster : `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`}
+                onError={() => setThumbError(true)}
                 alt="Video Profil Thumbnail"
                 className="w-full h-full object-cover"
               />

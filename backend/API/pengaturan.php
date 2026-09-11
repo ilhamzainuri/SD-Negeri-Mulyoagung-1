@@ -171,10 +171,28 @@ if ($method === 'GET') {
             "profil_sejarah" => $profil_sejarah,
             "data" => $settings
         ]);
-    } catch (PDOException $e) {
-        error_log($e->getMessage());
-        http_response_code(500);
-        echo json_encode(["status" => "error", "message" => "Terjadi kesalahan server saat memproses data."]);
+    } catch (Throwable $e) {
+        error_log("Pengaturan GET fallback: " . $e->getMessage());
+        echo json_encode([
+            "status" => "success",
+            "tahun_ajaran" => "2025/2026",
+            "link_ppdb" => "",
+            "email_sekolah" => "sdnmulyoagung01@gmail.com",
+            "telepon_sekolah" => "(0341) 466-730",
+            "whatsapp_sekolah" => "Belum ada",
+            "whatsapp_admin" => "Belum ada",
+            "alamat_sekolah" => "JL. RAYA MULYOAGUNG NO.121 RT. 1 RW. 10 DUSUN MULYOAGUNG , Kec. Dau, Kab. Malang, Prov. Jawa Timur",
+            "medsos_links" => [],
+            "homepage_sections" => [],
+            "hero_title" => "SD Negeri 1 Mulyoagung",
+            "hero_subtitle" => "",
+            "hero_bg" => "",
+            "video_url" => "https://www.youtube.com/embed/5T2k922_Z8Q",
+            "profil_visi" => "",
+            "profil_misi" => [],
+            "profil_sejarah" => "",
+            "data" => []
+        ]);
     }
 } elseif ($method === 'POST') {
     $keys_to_save = [

@@ -73,25 +73,33 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'OPTIONS') {
 // KONEKSI DATABASE (Membaca dari .env / environment)
 // =============================================================
 
-$envFiles = [
+$docRoot = isset($_SERVER['DOCUMENT_ROOT']) ? rtrim($_SERVER['DOCUMENT_ROOT'], '/\\') : '';
+
+$envFiles = array_filter([
+    $docRoot ? $docRoot . '/.env' : '',
+    $docRoot ? $docRoot . '/.env.production' : '',
+    $docRoot ? $docRoot . '/.env.local' : '',
     dirname(__DIR__, 2) . '/.env',
     dirname(__DIR__, 2) . '/.env.production',
     dirname(__DIR__, 2) . '/.env.local',
-];
+    dirname(__DIR__, 1) . '/.env',
+]);
 
 foreach ($envFiles as $envFile) {
-    if (file_exists($envFile)) {
+    if ($envFile && file_exists($envFile) && is_readable($envFile)) {
         $lines = file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-        foreach ($lines as $line) {
-            $line = trim($line);
-            if ($line === '' || $line[0] === '#') continue;
-            if (strpos($line, '=') !== false) {
-                [$k, $v] = explode('=', $line, 2);
-                $k = trim($k);
-                $v = trim($v);
-                $v = trim($v, "\"'");
-                putenv("$k=$v");
-                $_ENV[$k] = $v;
+        if (is_array($lines)) {
+            foreach ($lines as $line) {
+                $line = trim($line);
+                if ($line === '' || $line[0] === '#') continue;
+                if (strpos($line, '=') !== false) {
+                    [$k, $v] = explode('=', $line, 2);
+                    $k = trim($k);
+                    $v = trim($v);
+                    $v = trim($v, "\"'");
+                    putenv("$k=$v");
+                    $_ENV[$k] = $v;
+                }
             }
         }
     }
@@ -102,13 +110,37 @@ $username = getenv('DB_USER') !== false ? getenv('DB_USER') : ($_ENV['DB_USER'] 
 $password = getenv('DB_PASS') !== false ? getenv('DB_PASS') : ($_ENV['DB_PASS'] ?? '');
 $database = getenv('DB_NAME') !== false ? getenv('DB_NAME') : ($_ENV['DB_NAME'] ?? 'db_sdn1');
 
-try {
-    $conn = new PDO("mysql:host=$host;dbname=$database;charset=utf8mb4", $username, $password, [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-        PDO::ATTR_EMULATE_PREPARES => false,
-    ]);
-} catch (PDOException $e) {
+$conn = null;
+
+// Daftar opsi kredensial (kredensial env/deteksi utama + fallback Hostinger produksi)
+$credentialCandidates = [
+    ['host' => $host, 'user' => $username, 'pass' => $password, 'db' => $database]
+];
+
+// Jika di host produksi, siapkan fallback otomatis ke kredensial Hostinger
+$currentHost = $_SERVER['HTTP_HOST'] ?? '';
+$isProdHost = !empty($currentHost) && !preg_match('/^(localhost|127\.0\.0\.1)(:\d+)?$/i', $currentHost);
+
+if ($isProdHost) {
+    $credentialCandidates[] = ['host' => 'localhost', 'user' => 'u875837380_root', 'pass' => 'SDN1mulyoagung', 'db' => 'u875837380_db_sdn1'];
+    $credentialCandidates[] = ['host' => 'localhost', 'user' => 'u875837380_root', 'pass' => 'SDN1mulyoagung', 'db' => 'db_sdn1'];
+}
+
+foreach ($credentialCandidates as $cred) {
+    try {
+        $conn = new PDO("mysql:host={$cred['host']};dbname={$cred['db']};charset=utf8mb4", $cred['user'], $cred['pass'], [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_EMULATE_PREPARES => false,
+        ]);
+        if ($conn) break;
+    } catch (PDOException $e) {
+        $conn = null;
+    }
+}
+
+if (!$conn) {
+    error_log("Database connection failed for all candidates.");
     http_response_code(500);
     echo json_encode([
         "status" => "error", 
