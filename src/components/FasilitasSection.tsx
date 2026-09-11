@@ -62,7 +62,7 @@ export const FasilitasSection: React.FC<FasilitasSectionProps> = ({
     const fetchFacilities = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`${API_BASE_URL}/backend/API/fasilitas.php`);
+        const res = await fetch(`${API_BASE_URL}/fasilitas.php`);
         const json = await res.json();
         if (json.status === 'success' && Array.isArray(json.data) && json.data.length > 0) {
           setFacilities(json.data);

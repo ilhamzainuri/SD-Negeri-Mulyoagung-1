@@ -40,7 +40,7 @@ export const ModulPembelajaranSection: React.FC = () => {
     const fetchPublicModules = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`${API_BASE_URL}/backend/API/modul_pembelajaran.php`);
+        const res = await fetch(`${API_BASE_URL}/modul_pembelajaran.php`);
         const json = await res.json();
         if (json.status === 'success' && Array.isArray(json.data)) {
           setModules(json.data);

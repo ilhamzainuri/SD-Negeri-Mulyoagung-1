@@ -27,7 +27,7 @@ export const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab, onOpenP
   useEffect(() => {
     const fetchAkademikMenu = async () => {
       try {
-        const res = await fetch(`${API_BASE_URL}/backend/API/akademik_menu.php`);
+        const res = await fetch(`${API_BASE_URL}/akademik_menu.php`);
         const json = await res.json();
         if (json.status === 'success' && Array.isArray(json.data)) {
           setAkademikMenu(json.data);

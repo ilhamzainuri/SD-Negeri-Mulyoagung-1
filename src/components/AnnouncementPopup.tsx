@@ -45,7 +45,7 @@ export const AnnouncementPopup: React.FC = () => {
   useEffect(() => {
     const fetchAnnouncement = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/backend/API/pengumuman.php`);
+        const response = await fetch(`${API_BASE_URL}/pengumuman.php`);
         const result = await response.json();
         if (result.status === 'success' && result.data) {
           const isActivePublic = result.data.public_active !== undefined

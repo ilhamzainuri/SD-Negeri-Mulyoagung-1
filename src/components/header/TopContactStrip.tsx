@@ -17,7 +17,7 @@ export const TopContactStrip: React.FC = () => {
   useEffect(() => {
     const fetchAkreditasi = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/backend/API/statistik.php`);
+        const response = await fetch(`${API_BASE_URL}/statistik.php`);
         const result = await response.json();
 
         if (result.status === 'success' && Array.isArray(result.data)) {

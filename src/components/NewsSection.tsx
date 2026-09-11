@@ -62,7 +62,7 @@ export const NewsSection: React.FC<NewsSectionProps> = () => {
 
     const loadNews = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/backend/API/newsAPI.php`);
+        const response = await fetch(`${API_BASE_URL}/newsAPI.php`);
         const result = await response.json();
         if (result.status === 'success' && result.data && result.data.length > 0) {
           const mapped: Article[] = result.data.map((art: any) => {

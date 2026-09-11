@@ -317,7 +317,7 @@ export const CmsGlobalSearchModal: React.FC<CmsGlobalSearchModalProps> = ({
       setLoading(true);
       try {
         const res = await fetch(
-          `${API_BASE_URL}/backend/API/search.php?q=${encodeURIComponent(debouncedQuery.trim())}&status=all&cms=1`
+          `${API_BASE_URL}/search.php?q=${encodeURIComponent(debouncedQuery.trim())}&status=all&cms=1`
         );
         const json = await res.json();
         if (isMounted && json.status === 'success' && json.data) {

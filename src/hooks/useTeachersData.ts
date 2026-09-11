@@ -21,7 +21,7 @@ export const useTeachersData = (): Teacher[] => {
 
     const loadTeachers = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/backend/API/guru.php`);
+        const response = await fetch(`${API_BASE_URL}/guru.php`);
         const result = await response.json();
 
         if (result.status === 'success' && result.data && result.data.length > 0) {

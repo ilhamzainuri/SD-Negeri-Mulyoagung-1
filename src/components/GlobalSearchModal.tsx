@@ -220,7 +220,7 @@ export const GlobalSearchModal: React.FC<GlobalSearchModalProps> = ({ isOpen, on
     const fetchSearch = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`${API_BASE_URL}/backend/API/search.php?q=${encodeURIComponent(q)}`);
+        const res = await fetch(`${API_BASE_URL}/search.php?q=${encodeURIComponent(q)}`);
         const json = await res.json();
         if (isMounted && json.status === 'success' && json.data) {
           const apiData = json.data;

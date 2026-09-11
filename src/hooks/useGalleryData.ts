@@ -22,7 +22,7 @@ export const useGalleryData = (): GalleryItem[] => {
 
     const loadGallery = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/backend/API/galeri.php`);
+        const response = await fetch(`${API_BASE_URL}/galeri.php`);
         const result = await response.json();
 
         if (result.status === 'success' && result.data && result.data.length > 0) {

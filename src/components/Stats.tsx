@@ -94,8 +94,8 @@ export const Stats: React.FC = () => {
     const fetchStats = async () => {
       try {
         const [responseStats, responseGuru] = await Promise.all([
-          fetch(`${API_BASE_URL}/backend/API/statistik.php`),
-          fetch(`${API_BASE_URL}/backend/API/guru.php`)
+          fetch(`${API_BASE_URL}/statistik.php`),
+          fetch(`${API_BASE_URL}/guru.php`)
         ]);
 
         const resultStats = await responseStats.json();
