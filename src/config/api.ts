@@ -22,7 +22,7 @@ export const getApiBaseUrl = (): string => {
     }
 
     // Production environment (sdn1mulyoagung.sch.id or any custom domain)
-    if (hostname === 'sdn1mulyoagung.sch.id' || hostname.endsWith('.sch.id')) {
+    if (hostname === 'https://test.uydapz.site' || hostname.endsWith('..uydapz.site')) {
       return origin;
     }
 
@@ -30,7 +30,7 @@ export const getApiBaseUrl = (): string => {
     return origin;
   }
 
-  return 'https://sdn1mulyoagung.sch.id';
+  return 'https://test.uydapz.site';
 };
 
 export const API_BASE_URL = getApiBaseUrl();
