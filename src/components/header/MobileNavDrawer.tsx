@@ -183,7 +183,7 @@ export const MobileNavDrawer: React.FC<MobileNavDrawerProps> = ({
                 className="w-full bg-gradient-to-r from-teal-500 to-[#028C84] hover:from-teal-400 hover:to-[#006a64] text-white font-bold py-3 px-6 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-teal-500/30 active:scale-[0.99] text-sm sm:text-base"
               >
                 <Sparkles className="w-4 h-4 text-amber-300" />
-                Daftar Sekarang (PPDB Online)
+                Daftar Sekarang (SPMB Online)
               </a>
             ) : (
               <button
@@ -191,7 +191,7 @@ export const MobileNavDrawer: React.FC<MobileNavDrawerProps> = ({
                 className="w-full bg-gradient-to-r from-teal-500 to-[#028C84] hover:from-teal-400 hover:to-[#006a64] text-white font-bold py-3 px-6 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-teal-500/30 active:scale-[0.99] text-sm sm:text-base cursor-pointer"
               >
                 <Sparkles className="w-4 h-4 text-amber-300" />
-                Daftar Sekarang (PPDB Online)
+                Daftar Sekarang (SPMB Online)
               </button>
             )}
           </div>

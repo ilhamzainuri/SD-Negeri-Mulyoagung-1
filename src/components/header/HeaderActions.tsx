@@ -47,7 +47,7 @@ export const HeaderActions: React.FC<HeaderActionsProps> = ({
         className="bg-gradient-to-r from-[#028C84] to-[#156B63] hover:from-[#006a64] hover:to-[#0f544d] text-white font-semibold text-[11.5px] min-[1280px]:text-xs min-[1360px]:text-[13px] py-1.5 min-[1280px]:py-2 2xl:py-2.5 px-3 min-[1280px]:px-3.5 min-[1360px]:px-4 2xl:px-5 rounded-full transition-all shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] flex items-center gap-1.5 min-[1360px]:gap-2 cursor-pointer whitespace-nowrap"
       >
         <Sparkles className="w-3.5 h-3.5 2xl:w-4 2xl:h-4 text-amber-300 shrink-0" />
-        <span>PPDB Online</span>
+        <span>SPMB Online</span>
       </a>
     ) : (
       <button
@@ -55,7 +55,7 @@ export const HeaderActions: React.FC<HeaderActionsProps> = ({
         className="bg-gradient-to-r from-[#028C84] to-[#156B63] hover:from-[#006a64] hover:to-[#0f544d] text-white font-semibold text-[11.5px] min-[1280px]:text-xs min-[1360px]:text-[13px] py-1.5 min-[1280px]:py-2 2xl:py-2.5 px-3 min-[1280px]:px-3.5 min-[1360px]:px-4 2xl:px-5 rounded-full transition-all shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] flex items-center gap-1.5 min-[1360px]:gap-2 cursor-pointer whitespace-nowrap"
       >
         <Sparkles className="w-3.5 h-3.5 2xl:w-4 2xl:h-4 text-amber-300 shrink-0" />
-        <span>PPDB Online</span>
+        <span>SPMB Online</span>
       </button>
     )}
   </div>

@@ -205,7 +205,7 @@ export const Hero: React.FC<HeroProps> = ({
                 rel="noopener noreferrer"
                 className="group flex items-center justify-center gap-2 px-6 py-3 sm:px-8 sm:py-4 rounded-full bg-[#156B63] hover:bg-[#20C997] text-white text-sm sm:text-base font-semibold transition-all duration-300 shadow-xl hover:scale-105 hover:shadow-[#20C997]/30"
               >
-                PPDB Online
+                SPMB Online
                 <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
               </a>
             ) : (
@@ -213,7 +213,7 @@ export const Hero: React.FC<HeroProps> = ({
                 onClick={onOpenPpdb}
                 className="group flex items-center justify-center gap-2 px-6 py-3 sm:px-8 sm:py-4 rounded-full bg-[#156B63] hover:bg-[#20C997] text-white text-sm sm:text-base font-semibold transition-all duration-300 shadow-xl hover:scale-105 hover:shadow-[#20C997]/30"
               >
-                PPDB Online
+                SPMB Online
                 <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
               </button>
             )}

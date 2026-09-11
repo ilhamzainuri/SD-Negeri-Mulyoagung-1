@@ -33,14 +33,14 @@ export const QuickLinks: React.FC<QuickLinksProps> = ({ onNavClick, onOpenPpdb, 
             rel="noopener noreferrer"
             className="text-amber-300 hover:text-amber-200 font-bold flex items-center gap-1.5 transition-all cursor-pointer mt-1"
           >
-            <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5" /> Penerimaan Siswa Baru (PPDB)
+            <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5" /> Penerimaan Siswa Baru (SPMB)
           </a>
         ) : (
           <button
             onClick={onOpenPpdb}
             className="text-amber-300 hover:text-amber-200 font-bold flex items-center gap-1.5 transition-all cursor-pointer mt-1"
           >
-            <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5" /> Penerimaan Siswa Baru (PPDB)
+            <Sparkles className="w-3.5 h-3.5" /> Penerimaan Siswa Baru (SPMB)
           </button>
         )}
       </li>

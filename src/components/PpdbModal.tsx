@@ -118,10 +118,10 @@ export const PpdbModal: React.FC<PpdbModalProps> = ({ isOpen, onClose }) => {
                 Tahun Ajaran 2025/2026
               </div>
               <h2 className="text-xl sm:text-2xl font-extrabold">
-                Formulir PPDB Online
+                Formulir SPMB Online
               </h2>
               <p className="text-xs sm:text-sm text-slate-200 opacity-90">
-                Penerimaan Peserta Didik Baru SD Negeri 1 Mulyoagung
+                Sistem Penerimaan Murid Baru SD Negeri 1 Mulyoagung
               </p>
             </div>
           </div>
