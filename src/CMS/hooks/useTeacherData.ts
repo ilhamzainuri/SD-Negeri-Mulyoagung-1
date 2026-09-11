@@ -26,7 +26,7 @@ export function useTeacherData() {
   const fetchTeachers = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${API_BASE}/backend/API/guru.php`);
+      const response = await fetch(`${API_BASE}/guru.php`);
       const result = await response.json();
       if (result.status === 'success') {
         setTeachers(result.data || []);
@@ -52,7 +52,7 @@ export function useTeacherData() {
     formData.append('id', id.toString());
 
     try {
-      const response = await fetch(`${API_BASE}/backend/API/guru.php`, {
+      const response = await fetch(`${API_BASE}/guru.php`, {
         method: 'POST',
         body: formData,
       });

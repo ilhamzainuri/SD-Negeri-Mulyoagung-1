@@ -51,7 +51,7 @@ export default function StatistikCrud({ currentUser }: StatistikCrudProps) {
   const fetchStatistik = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${API_BASE}/backend/API/statistik.php`);
+      const response = await fetch(`${API_BASE}/statistik.php`);
       const result = await response.json();
       if (result.status === 'success') {
         setItems(result.data || []);
@@ -105,7 +105,7 @@ export default function StatistikCrud({ currentUser }: StatistikCrudProps) {
     formData.append('label', label);
 
     try {
-      const response = await fetch(`${API_BASE}/backend/API/statistik.php`, {
+      const response = await fetch(`${API_BASE}/statistik.php`, {
         method: 'POST',
         body: formData,
       });
@@ -156,7 +156,7 @@ export default function StatistikCrud({ currentUser }: StatistikCrudProps) {
         formData.append('id', id.toString());
 
         try {
-          const response = await fetch(`${API_BASE}/backend/API/statistik.php`, {
+          const response = await fetch(`${API_BASE}/statistik.php`, {
             method: 'POST',
             body: formData,
           });

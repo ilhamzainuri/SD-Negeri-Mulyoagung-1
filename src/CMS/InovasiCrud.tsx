@@ -178,7 +178,7 @@ export default function InovasiCrud({ currentUser }: InovasiCrudProps) {
     }
 
     try {
-      const response = await fetch(`${API_BASE}/backend/API/inovasi.php`, {
+      const response = await fetch(`${API_BASE}/inovasi.php`, {
         method: 'POST',
         body: formData,
       });

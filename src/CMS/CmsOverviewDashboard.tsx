@@ -136,19 +136,19 @@ export const CmsOverviewDashboard: React.FC<CmsOverviewDashboardProps> = ({
     try {
       // Parallel API calls using Promise.allSettled for maximum fault tolerance
       const promises: Promise<Response>[] = [
-        fetch(`${API_BASE}/backend/API/newsAPI.php?status=all`),
-        fetch(`${API_BASE}/backend/API/galeri.php?status=all`),
-        fetch(`${API_BASE}/backend/API/modul_pembelajaran.php?status=all`),
-        fetch(`${API_BASE}/backend/API/inovasi.php?status=all`),
+        fetch(`${API_BASE}/newsAPI.php?status=all`),
+        fetch(`${API_BASE}/galeri.php?status=all`),
+        fetch(`${API_BASE}/modul_pembelajaran.php?status=all`),
+        fetch(`${API_BASE}/inovasi.php?status=all`),
       ];
 
       if (isAdmin) {
         promises.push(
-          fetch(`${API_BASE}/backend/API/guru.php`),
-          fetch(`${API_BASE}/backend/API/users.php`),
-          fetch(`${API_BASE}/backend/API/hero_carousel.php`),
-          fetch(`${API_BASE}/backend/API/pengaturan.php`),
-          fetch(`${API_BASE}/backend/API/statistik.php`),
+          fetch(`${API_BASE}/guru.php`),
+          fetch(`${API_BASE}/users.php`),
+          fetch(`${API_BASE}/hero_carousel.php`),
+          fetch(`${API_BASE}/pengaturan.php`),
+          fetch(`${API_BASE}/statistik.php`),
         );
       }
 

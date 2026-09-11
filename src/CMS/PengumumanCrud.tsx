@@ -67,7 +67,7 @@ export default function PengumumanCrud() {
   const fetchPengumuman = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${API_BASE}/backend/API/pengumuman.php`);
+      const response = await fetch(`${API_BASE}/pengumuman.php`);
       const result = await response.json();
       if (result.status === 'success' && result.data) {
         setJudul(result.data.judul || '');
@@ -194,7 +194,7 @@ export default function PengumumanCrud() {
     }
 
     try {
-      const response = await fetch(`${API_BASE}/backend/API/pengumuman.php`, {
+      const response = await fetch(`${API_BASE}/pengumuman.php`, {
         method: 'POST',
         body: formData,
       });

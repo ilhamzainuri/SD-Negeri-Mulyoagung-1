@@ -25,7 +25,7 @@ export function useNewsData() {
   const fetchArticles = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${API_BASE}/backend/API/newsAPI.php?status=all&_t=${Date.now()}`, {
+      const response = await fetch(`${API_BASE}/newsAPI.php?status=all&_t=${Date.now()}`, {
         cache: 'no-store',
       });
       const result = await response.json();
@@ -55,7 +55,7 @@ export function useNewsData() {
     if (role) formData.append('role', role);
 
     try {
-      const response = await fetch(`${API_BASE}/backend/API/newsAPI.php`, {
+      const response = await fetch(`${API_BASE}/newsAPI.php`, {
         method: 'POST',
         body: formData,
       });

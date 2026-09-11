@@ -159,7 +159,7 @@ export default function FasilitasCrud({ currentUser }: FasilitasCrudProps) {
     }
 
     try {
-      const response = await fetch(`${API_BASE}/backend/API/fasilitas.php`, {
+      const response = await fetch(`${API_BASE}/fasilitas.php`, {
         method: 'POST',
         body: formData,
       });

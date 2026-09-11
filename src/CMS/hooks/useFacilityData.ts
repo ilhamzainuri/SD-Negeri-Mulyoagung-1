@@ -20,7 +20,7 @@ export function useFacilityData() {
   const fetchFacilities = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${API_BASE}/backend/API/fasilitas.php`);
+      const response = await fetch(`${API_BASE}/fasilitas.php`);
       const result = await response.json();
       if (result.status === 'success') {
         setItems(result.data || []);
@@ -46,7 +46,7 @@ export function useFacilityData() {
     formData.append('id', id.toString());
 
     try {
-      const response = await fetch(`${API_BASE}/backend/API/fasilitas.php`, {
+      const response = await fetch(`${API_BASE}/fasilitas.php`, {
         method: 'POST',
         body: formData,
       });

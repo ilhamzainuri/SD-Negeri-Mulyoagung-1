@@ -213,7 +213,7 @@ export default function ModulPembelajaranCrud({ currentUser }: ModulPembelajaran
     }
 
     try {
-      const response = await fetch(`${API_BASE}/backend/API/modul_pembelajaran.php`, {
+      const response = await fetch(`${API_BASE}/modul_pembelajaran.php`, {
         method: 'POST',
         body: formData,
       });

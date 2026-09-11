@@ -36,7 +36,7 @@ export function useModulData() {
   const fetchModules = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${API_BASE}/backend/API/modul_pembelajaran.php?status=all&_t=${Date.now()}`, {
+      const response = await fetch(`${API_BASE}/modul_pembelajaran.php?status=all&_t=${Date.now()}`, {
         cache: 'no-store',
       });
       const result = await response.json();
@@ -66,7 +66,7 @@ export function useModulData() {
     if (role) formData.append('role', role);
 
     try {
-      const response = await fetch(`${API_BASE}/backend/API/modul_pembelajaran.php`, {
+      const response = await fetch(`${API_BASE}/modul_pembelajaran.php`, {
         method: 'POST',
         body: formData,
       });
@@ -96,7 +96,7 @@ export function useModulData() {
     if (role) formData.append('role', role);
 
     try {
-      const response = await fetch(`${API_BASE}/backend/API/modul_pembelajaran.php`, {
+      const response = await fetch(`${API_BASE}/modul_pembelajaran.php`, {
         method: 'POST',
         body: formData,
       });

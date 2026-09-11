@@ -96,7 +96,7 @@ export default function UserCrud({ currentUser, onUpdateCurrentUser }: UserCrudP
     if (currentUser.role !== 'ADMIN') return;
     setLoading(true);
     try {
-      const response = await fetch(`${API_BASE}/backend/API/users.php`);
+      const response = await fetch(`${API_BASE}/users.php`);
       const result = await response.json();
       if (result.status === 'success') {
         setUsers(result.data || []);
@@ -138,7 +138,7 @@ export default function UserCrud({ currentUser, onUpdateCurrentUser }: UserCrudP
     }
 
     try {
-      const response = await fetch(`${API_BASE}/backend/API/users.php`, {
+      const response = await fetch(`${API_BASE}/users.php`, {
         method: 'POST',
         body: formData,
       });
@@ -181,7 +181,7 @@ export default function UserCrud({ currentUser, onUpdateCurrentUser }: UserCrudP
     }
 
     try {
-      const response = await fetch(`${API_BASE}/backend/API/users.php`, {
+      const response = await fetch(`${API_BASE}/users.php`, {
         method: 'POST',
         body: formData,
       });
@@ -220,7 +220,7 @@ export default function UserCrud({ currentUser, onUpdateCurrentUser }: UserCrudP
         formData.append('id', id.toString());
 
         try {
-          const response = await fetch(`${API_BASE}/backend/API/users.php`, {
+          const response = await fetch(`${API_BASE}/users.php`, {
             method: 'POST',
             body: formData,
           });
@@ -247,7 +247,7 @@ export default function UserCrud({ currentUser, onUpdateCurrentUser }: UserCrudP
     formData.append('id', user.id.toString());
 
     try {
-      const response = await fetch(`${API_BASE}/backend/API/users.php`, {
+      const response = await fetch(`${API_BASE}/users.php`, {
         method: 'POST',
         body: formData,
       });

@@ -79,7 +79,7 @@ export default function CmsLogin({ onLoginSuccess, onBackToHome }: CmsLoginProps
         }
 
         try {
-            const response = await fetch(`${API_BASE}/backend/API/auth.php`, {
+            const response = await fetch(`${API_BASE}/auth.php`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

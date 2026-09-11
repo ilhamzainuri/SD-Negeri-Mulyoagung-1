@@ -4,34 +4,13 @@ require_once 'foto_helper.php';
 
 header("Content-Type: application/json");
 
-// Ensure settings table exists
+// Ensure settings table exists & defaults initialized safely
 try {
     $conn->exec("CREATE TABLE IF NOT EXISTS `pengaturan_sekolah` (
-        `setting_key` VARCHAR(100) NOT NULL,
+        `setting_key` VARCHAR(100) NOT NULL PRIMARY KEY,
         `setting_value` TEXT NOT NULL,
         `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;");
-
-    // === AUTO-FIX: Pastikan PRIMARY KEY ada (untuk tabel lama yang dibuat tanpa PK) ===
-    $pkCheck = $conn->query("SHOW INDEX FROM pengaturan_sekolah WHERE Key_name = 'PRIMARY'");
-    if ($pkCheck->rowCount() == 0) {
-        // Tambah kolom sementara auto-increment agar bisa deduplikasi
-        $conn->exec("ALTER TABLE pengaturan_sekolah ADD COLUMN _tmp_id BIGINT AUTO_INCREMENT, ADD KEY(_tmp_id)");
-
-        // Hapus baris duplikat — simpan yang paling terakhir diinsert (tmp_id terbesar)
-        $conn->exec("
-            DELETE a FROM pengaturan_sekolah a
-            INNER JOIN pengaturan_sekolah b
-                ON a.setting_key = b.setting_key AND a._tmp_id < b._tmp_id
-        ");
-
-        // Hapus kolom sementara
-        $conn->exec("ALTER TABLE pengaturan_sekolah DROP COLUMN _tmp_id");
-
-        // Tambahkan PRIMARY KEY
-        $conn->exec("ALTER TABLE pengaturan_sekolah ADD PRIMARY KEY (setting_key)");
-    }
-    // === END AUTO-FIX ===
 
     // Insert default keys if not exist
     $defaults = [
@@ -72,16 +51,17 @@ try {
         'profil_sejarah' => 'SD Negeri 1 Mulyoagung berdiri sejak tahun 1976 di wilayah Kecamatan Dau, Kabupaten Malang. Selama puluhan tahun, sekolah ini telah meluluskan ribuan alumni yang sukses dan terus berkontribusi di berbagai bidang. Dengan komitmen peningkatan mutu berkelanjutan, kami terus berbenah secara fasilitas maupun kurikulum untuk menghadirkan layanan pendidikan dasar terbaik bagi masyarakat.'
     ];
 
+    $stmtCheck = $conn->prepare("SELECT COUNT(*) FROM pengaturan_sekolah WHERE setting_key = ?");
+    $stmtInit  = $conn->prepare("INSERT INTO pengaturan_sekolah (setting_key, setting_value) VALUES (?, ?)");
+
     foreach ($defaults as $key => $val) {
-        $stmtCheck = $conn->prepare("SELECT COUNT(*) FROM pengaturan_sekolah WHERE setting_key = ?");
         $stmtCheck->execute([$key]);
         if ($stmtCheck->fetchColumn() == 0) {
-            $stmtInit = $conn->prepare("INSERT INTO pengaturan_sekolah (setting_key, setting_value) VALUES (?, ?)");
             $stmtInit->execute([$key, $val]);
         }
     }
-} catch (PDOException $e) {
-    // Continue even if table creation fails
+} catch (Throwable $e) {
+    // Abaikan kegagalan inisialisasi agar SELECT di bawah tetap bisa berjalan
 }
 
 $method = $_SERVER['REQUEST_METHOD'];

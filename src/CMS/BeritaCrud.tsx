@@ -143,7 +143,7 @@ export default function BeritaCrud({ currentUser }: BeritaCrudProps) {
     }
 
     try {
-      const response = await fetch(`${API_BASE}/backend/API/newsAPI.php`, {
+      const response = await fetch(`${API_BASE}/newsAPI.php`, {
         method: 'POST',
         body: formData,
       });

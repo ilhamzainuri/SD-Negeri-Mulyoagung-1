@@ -128,7 +128,7 @@ export default function AkademikCrud({ currentUser }: AkademikCrudProps) {
     formData.append('role', currentUser.role);
 
     try {
-      const response = await fetch(`${API_BASE}/backend/API/akademik_menu.php`, {
+      const response = await fetch(`${API_BASE}/akademik_menu.php`, {
         method: 'POST',
         body: formData,
       });

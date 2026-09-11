@@ -143,7 +143,7 @@ export default function GaleriCrud({ currentUser }: GaleriCrudProps) {
     }
 
     try {
-      const response = await fetch(`${API_BASE}/backend/API/galeri.php`, {
+      const response = await fetch(`${API_BASE}/galeri.php`, {
         method: 'POST',
         body: formData,
       });

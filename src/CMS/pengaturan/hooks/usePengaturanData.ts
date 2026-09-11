@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { getApiBaseUrl } from '../../../config/api';
+import { getApiBaseUrl, getImageUrl } from '../../../config/api';
 import { ToastType } from '../../components/CmsToast';
 import { validateImageFile } from '../../utils/fileValidation';
 import { ImageUploadPayload } from '../../components/ImageUploadField';
@@ -127,7 +127,7 @@ export const usePengaturanData = () => {
   const fetchSettings = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${API_BASE}/backend/API/pengaturan.php`);
+      const response = await fetch(`${API_BASE}/pengaturan.php`);
       const result = await response.json();
       if (result.status === 'success') {
         if (result.tahun_ajaran) setTahunAjaran(result.tahun_ajaran);
@@ -159,7 +159,7 @@ export const usePengaturanData = () => {
 
   const fetchHeroSlides = async () => {
     try {
-      const res = await fetch(`${API_BASE}/backend/API/hero_carousel.php`);
+      const res = await fetch(`${API_BASE}/hero_carousel.php`);
       const json = await res.json();
       if (json.status === 'success' && Array.isArray(json.data)) {
         setHeroSlides(json.data);
@@ -203,7 +203,7 @@ export const usePengaturanData = () => {
         form.append('hero_bg', heroBgFile);
       }
 
-      const response = await fetch(`${API_BASE}/backend/API/pengaturan.php`, {
+      const response = await fetch(`${API_BASE}/pengaturan.php`, {
         method: 'POST',
         body: form,
       });
@@ -233,7 +233,7 @@ export const usePengaturanData = () => {
       const form = new FormData();
       form.append('profil_visi', profilVisi);
       form.append('profil_misi', JSON.stringify(misiArr));
-      const res = await fetch(`${API_BASE}/backend/API/pengaturan.php`, { method: 'POST', body: form });
+      const res = await fetch(`${API_BASE}/pengaturan.php`, { method: 'POST', body: form });
       const result = await res.json();
       if (result.status === 'success') {
         setMessage({ type: 'success', text: 'Visi & Misi sekolah berhasil disimpan!' });
@@ -254,7 +254,7 @@ export const usePengaturanData = () => {
     try {
       const form = new FormData();
       form.append('profil_sejarah', profilSejarah);
-      const res = await fetch(`${API_BASE}/backend/API/pengaturan.php`, { method: 'POST', body: form });
+      const res = await fetch(`${API_BASE}/pengaturan.php`, { method: 'POST', body: form });
       const result = await res.json();
       if (result.status === 'success') {
         setMessage({ type: 'success', text: 'Sejarah sekolah berhasil disimpan!' });
@@ -279,7 +279,7 @@ export const usePengaturanData = () => {
       form.append('whatsapp_sekolah', whatsappSekolah);
       form.append('whatsapp_admin', whatsappAdmin);
       form.append('alamat_sekolah', alamatSekolah);
-      const res = await fetch(`${API_BASE}/backend/API/pengaturan.php`, { method: 'POST', body: form });
+      const res = await fetch(`${API_BASE}/pengaturan.php`, { method: 'POST', body: form });
       const result = await res.json();
       if (result.status === 'success') {
         setMessage({ type: 'success', text: 'Kontak sekolah berhasil disimpan!' });
@@ -301,7 +301,7 @@ export const usePengaturanData = () => {
       const form = new FormData();
       form.append('link_ppdb', linkPpdb);
       form.append('tahun_ajaran', tahunAjaran);
-      const res = await fetch(`${API_BASE}/backend/API/pengaturan.php`, { method: 'POST', body: form });
+      const res = await fetch(`${API_BASE}/pengaturan.php`, { method: 'POST', body: form });
       const result = await res.json();
       if (result.status === 'success') {
         setMessage({ type: 'success', text: 'Pengaturan PPDB berhasil disimpan!' });
@@ -322,7 +322,7 @@ export const usePengaturanData = () => {
     try {
       const form = new FormData();
       form.append('video_url', videoUrl);
-      const res = await fetch(`${API_BASE}/backend/API/pengaturan.php`, { method: 'POST', body: form });
+      const res = await fetch(`${API_BASE}/pengaturan.php`, { method: 'POST', body: form });
       const result = await res.json();
       if (result.status === 'success') {
         setMessage({ type: 'success', text: 'Video profil sekolah berhasil disimpan!' });
@@ -343,7 +343,7 @@ export const usePengaturanData = () => {
     try {
       const form = new FormData();
       form.append('homepage_sections', JSON.stringify(homepageSections));
-      const res = await fetch(`${API_BASE}/backend/API/pengaturan.php`, { method: 'POST', body: form });
+      const res = await fetch(`${API_BASE}/pengaturan.php`, { method: 'POST', body: form });
       const result = await res.json();
       if (result.status === 'success') {
         setMessage({ type: 'success', text: 'Struktur halaman utama berhasil disimpan!' });
@@ -365,7 +365,7 @@ export const usePengaturanData = () => {
     try {
       const form = new FormData();
       form.append('medsos_links', JSON.stringify(targetMedsos));
-      const res = await fetch(`${API_BASE}/backend/API/pengaturan.php`, { method: 'POST', body: form });
+      const res = await fetch(`${API_BASE}/pengaturan.php`, { method: 'POST', body: form });
       const result = await res.json();
       if (result.status === 'success') {
         setMessage({ type: 'success', text: 'Media sosial sekolah berhasil disimpan!' });
@@ -466,7 +466,7 @@ export const usePengaturanData = () => {
       form.append('action', 'reorder');
       form.append('items', JSON.stringify(payload));
 
-      const res = await fetch(`${API_BASE}/backend/API/hero_carousel.php`, {
+      const res = await fetch(`${API_BASE}/hero_carousel.php`, {
         method: 'POST',
         body: form,
       });
@@ -513,7 +513,7 @@ export const usePengaturanData = () => {
     if (!source) return;
     if (heroCropSrcRef.current) URL.revokeObjectURL(heroCropSrcRef.current);
     setHeroCropName(source.split('/').pop() || 'foto');
-    setHeroCropSrc(`${API_BASE}/${source}`);
+    setHeroCropSrc(getImageUrl(source));
     setHeroCropOpen(true);
   };
 
@@ -540,7 +540,7 @@ export const usePengaturanData = () => {
       form.append('action', 'delete');
       form.append('id', id.toString());
 
-      const res = await fetch(`${API_BASE}/backend/API/hero_carousel.php`, {
+      const res = await fetch(`${API_BASE}/hero_carousel.php`, {
         method: 'POST',
         body: form,
       });
@@ -586,7 +586,7 @@ export const usePengaturanData = () => {
         form.append('foto', heroFotoPayload.cropped);
       }
 
-      const res = await fetch(`${API_BASE}/backend/API/hero_carousel.php`, {
+      const res = await fetch(`${API_BASE}/hero_carousel.php`, {
         method: 'POST',
         body: form,
       });

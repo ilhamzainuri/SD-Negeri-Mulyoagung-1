@@ -154,7 +154,7 @@ export default function GuruCrud() {
     }
 
     try {
-      const response = await fetch(`${API_BASE}/backend/API/guru.php`, {
+      const response = await fetch(`${API_BASE}/guru.php`, {
         method: 'POST',
         body: formData,
       });

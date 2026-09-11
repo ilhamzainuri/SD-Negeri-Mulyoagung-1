@@ -13,7 +13,7 @@ export function useAkademikData(status: 'all' | 'active_only' = 'active_only') {
   const fetchItems = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${API_BASE}/backend/API/akademik_menu.php?status=${status}&_t=${Date.now()}`, {
+      const response = await fetch(`${API_BASE}/akademik_menu.php?status=${status}&_t=${Date.now()}`, {
         cache: 'no-store',
       });
       const result = await response.json();
@@ -42,7 +42,7 @@ export function useAkademikData(status: 'all' | 'active_only' = 'active_only') {
     formData.append('role', role);
 
     try {
-      const response = await fetch(`${API_BASE}/backend/API/akademik_menu.php`, {
+      const response = await fetch(`${API_BASE}/akademik_menu.php`, {
         method: 'POST',
         body: formData,
       });
@@ -73,7 +73,7 @@ export function useAkademikData(status: 'all' | 'active_only' = 'active_only') {
       formData.append('items', JSON.stringify(payload));
       formData.append('role', role);
 
-      const response = await fetch(`${API_BASE}/backend/API/akademik_menu.php`, {
+      const response = await fetch(`${API_BASE}/akademik_menu.php`, {
         method: 'POST',
         body: formData,
       });

@@ -76,7 +76,7 @@ export default function Verifikasi() {
     setLoading(true);
     try {
       // Fetch news
-      const resNews = await fetch(`${API_BASE}/backend/API/newsAPI.php?status=all`);
+      const resNews = await fetch(`${API_BASE}/newsAPI.php?status=all`);
       const newsResult = await resNews.json();
       if (newsResult.status === 'success') {
         const pendingArticles = newsResult.data.filter((item: NewsArticle) => item.status_verifikasi === 'Pending');
@@ -84,7 +84,7 @@ export default function Verifikasi() {
       }
 
       // Fetch gallery
-      const resGallery = await fetch(`${API_BASE}/backend/API/galeri.php?status=all`);
+      const resGallery = await fetch(`${API_BASE}/galeri.php?status=all`);
       const galResult = await resGallery.json();
       if (galResult.status === 'success') {
         const pendingItems = galResult.data.filter((item: GalleryItem) => item.status_verifikasi === 'Pending');
@@ -92,7 +92,7 @@ export default function Verifikasi() {
       }
 
       // Fetch modules
-      const resModul = await fetch(`${API_BASE}/backend/API/modul_pembelajaran.php?status=all`);
+      const resModul = await fetch(`${API_BASE}/modul_pembelajaran.php?status=all`);
       const modResult = await resModul.json();
       if (modResult.status === 'success') {
         const pendingMods = modResult.data.filter((item: ModulItem) => item.status_verifikasi === 'Pending');
@@ -100,7 +100,7 @@ export default function Verifikasi() {
       }
 
       // Fetch inovasi
-      const resInovasi = await fetch(`${API_BASE}/backend/API/inovasi.php?status=all`);
+      const resInovasi = await fetch(`${API_BASE}/inovasi.php?status=all`);
       const inovasiResult = await resInovasi.json();
       if (inovasiResult.status === 'success') {
         const pendingInov = inovasiResult.data.filter((item: InovasiVerifItem) => item.status_verifikasi === 'Pending');
@@ -190,7 +190,7 @@ export default function Verifikasi() {
     formData.append('status_verifikasi', decision);
 
     try {
-      const response = await fetch(`${API_BASE}/backend/API/newsAPI.php`, {
+      const response = await fetch(`${API_BASE}/newsAPI.php`, {
         method: 'POST',
         body: formData,
       });
@@ -215,7 +215,7 @@ export default function Verifikasi() {
     formData.append('status_verifikasi', decision);
 
     try {
-      const response = await fetch(`${API_BASE}/backend/API/galeri.php`, {
+      const response = await fetch(`${API_BASE}/galeri.php`, {
         method: 'POST',
         body: formData,
       });
@@ -240,7 +240,7 @@ export default function Verifikasi() {
     formData.append('status_verifikasi', decision);
 
     try {
-      const response = await fetch(`${API_BASE}/backend/API/modul_pembelajaran.php`, {
+      const response = await fetch(`${API_BASE}/modul_pembelajaran.php`, {
         method: 'POST',
         body: formData,
       });
@@ -265,7 +265,7 @@ export default function Verifikasi() {
     formData.append('status_verifikasi', decision);
 
     try {
-      const response = await fetch(`${API_BASE}/backend/API/inovasi.php`, {
+      const response = await fetch(`${API_BASE}/inovasi.php`, {
         method: 'POST',
         body: formData,
       });

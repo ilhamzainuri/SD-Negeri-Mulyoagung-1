@@ -26,7 +26,7 @@ export function useGalleryData() {
   const fetchGallery = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${API_BASE}/backend/API/galeri.php?status=all&_t=${Date.now()}`, {
+      const response = await fetch(`${API_BASE}/galeri.php?status=all&_t=${Date.now()}`, {
         cache: 'no-store',
       });
       const result = await response.json();
@@ -56,7 +56,7 @@ export function useGalleryData() {
     if (role) formData.append('role', role);
 
     try {
-      const response = await fetch(`${API_BASE}/backend/API/galeri.php`, {
+      const response = await fetch(`${API_BASE}/galeri.php`, {
         method: 'POST',
         body: formData,
       });

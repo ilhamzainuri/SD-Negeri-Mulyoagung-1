@@ -36,7 +36,7 @@ export default function SambutanKepsekCrud() {
   const fetchSambutan = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${API_BASE}/backend/API/sambutan.php`);
+      const response = await fetch(`${API_BASE}/sambutan.php`);
       const result = await response.json();
       if (result.status === 'success' && result.data) {
         setNama(result.data.nama || '');
@@ -110,7 +110,7 @@ export default function SambutanKepsekCrud() {
     }
 
     try {
-      const response = await fetch(`${API_BASE}/backend/API/sambutan.php`, {
+      const response = await fetch(`${API_BASE}/sambutan.php`, {
         method: 'POST',
         body: formData,
       });

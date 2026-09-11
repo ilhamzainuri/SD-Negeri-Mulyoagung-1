@@ -13,7 +13,7 @@ export function useInovasiData() {
   const fetchInovasi = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${API_BASE}/backend/API/inovasi.php?status=all&_t=${Date.now()}`, {
+      const response = await fetch(`${API_BASE}/inovasi.php?status=all&_t=${Date.now()}`, {
         cache: 'no-store',
       });
       const result = await response.json();
@@ -43,7 +43,7 @@ export function useInovasiData() {
     if (role) formData.append('role', role);
 
     try {
-      const response = await fetch(`${API_BASE}/backend/API/inovasi.php`, {
+      const response = await fetch(`${API_BASE}/inovasi.php`, {
         method: 'POST',
         body: formData,
       });
@@ -73,7 +73,7 @@ export function useInovasiData() {
     if (role) formData.append('role', role);
 
     try {
-      const response = await fetch(`${API_BASE}/backend/API/inovasi.php`, {
+      const response = await fetch(`${API_BASE}/inovasi.php`, {
         method: 'POST',
         body: formData,
       });
@@ -101,7 +101,7 @@ export function useInovasiData() {
     formData.append('status_verifikasi', statusVerifikasi);
 
     try {
-      const response = await fetch(`${API_BASE}/backend/API/inovasi.php`, {
+      const response = await fetch(`${API_BASE}/inovasi.php`, {
         method: 'POST',
         body: formData,
       });
