@@ -1,9 +1,33 @@
+# =============================================================
+# PROTEKSI FOLDER UPLOADS - Nonaktifkan Eksekusi Skrip
+# =============================================================
+
+Options -Indexes -ExecCGI
+
+<FilesMatch "\.(php|phtml|php3|php4|php5|php7|php8|phps|cgi|pl|py|sh|exe|jsp|asp|aspx|html|htm)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+<IfModule mod_php.c>
+    php_flag engine off
+</IfModule>
+
+<IfModule mod_php7.c>
+    php_flag engine off
+</IfModule>
+
+<IfModule mod_php8.c>
+    php_flag engine off
+</IfModule>
+
 # Izinkan akses CORS dan embed PDF/gambar di iframe
 <IfModule mod_headers.c>
-    Header set Access-Control-Allow-Origign "*"
+    Header set Access-Control-Allow-Origin "*"
     Header set Access-Control-Allow-Methods "GET, OPTIONS"
     Header set Access-Control-Allow-Headers "*"
     Header unset X-Frame-Options
     Header set X-Frame-Options "ALLOWALL"
+    Header set X-Content-Type-Options "nosniff"
 </IfModule>
 

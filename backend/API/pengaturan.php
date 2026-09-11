@@ -4,13 +4,47 @@ require_once 'foto_helper.php';
 
 header("Content-Type: application/json");
 
-// Ensure settings table exists & defaults initialized safely
+// Ensure settings table exists & automatically migrate old schema if necessary
 try {
-    $conn->exec("CREATE TABLE IF NOT EXISTS `pengaturan_sekolah` (
-        `setting_key` VARCHAR(100) NOT NULL PRIMARY KEY,
-        `setting_value` TEXT NOT NULL,
-        `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;");
+    $tableExists = false;
+    $cols = [];
+    try {
+        $stmtDesc = $conn->query("DESCRIBE `pengaturan_sekolah`");
+        $cols = $stmtDesc->fetchAll(PDO::FETCH_COLUMN);
+        $tableExists = true;
+    } catch (Throwable $e) {
+        $tableExists = false;
+    }
+
+    if (!$tableExists) {
+        $conn->exec("CREATE TABLE IF NOT EXISTS `pengaturan_sekolah` (
+            `setting_key` VARCHAR(100) NOT NULL PRIMARY KEY,
+            `setting_value` TEXT NOT NULL,
+            `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;");
+    } elseif (!in_array('setting_key', $cols)) {
+        // Old row-based schema detected: read existing row data and migrate to key-value table
+        $oldRow = [];
+        try {
+            $oldRow = $conn->query("SELECT * FROM `pengaturan_sekolah` LIMIT 1")->fetch(PDO::FETCH_ASSOC);
+        } catch (Throwable $e) {}
+
+        $conn->exec("DROP TABLE `pengaturan_sekolah`");
+        $conn->exec("CREATE TABLE `pengaturan_sekolah` (
+            `setting_key` VARCHAR(100) NOT NULL PRIMARY KEY,
+            `setting_value` TEXT NOT NULL,
+            `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;");
+
+        if ($oldRow) {
+            $stmtMigrate = $conn->prepare("INSERT INTO `pengaturan_sekolah` (setting_key, setting_value) VALUES (?, ?)");
+            foreach ($oldRow as $k => $v) {
+                if ($k !== 'id' && $v !== null && $v !== '') {
+                    $stmtMigrate->execute([$k, (string)$v]);
+                }
+            }
+        }
+    }
 
     // Insert default keys if not exist
     $defaults = [
@@ -61,17 +95,21 @@ try {
         }
     }
 } catch (Throwable $e) {
-    // Abaikan kegagalan inisialisasi agar SELECT di bawah tetap bisa berjalan
+    error_log("Pengaturan init warning: " . $e->getMessage());
 }
 
 $method = $_SERVER['REQUEST_METHOD'];
 
 if ($method === 'GET') {
     try {
-        $stmt = $conn->query("SELECT setting_key, setting_value FROM pengaturan_sekolah");
         $settings = [];
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $settings[$row['setting_key']] = $row['setting_value'];
+        try {
+            $stmt = $conn->query("SELECT setting_key, setting_value FROM pengaturan_sekolah");
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $settings[$row['setting_key']] = $row['setting_value'];
+            }
+        } catch (Throwable $e) {
+            error_log("Pengaturan select warning: " . $e->getMessage());
         }
 
         $tahun_ajaran = isset($settings['tahun_ajaran']) ? $settings['tahun_ajaran'] : '2025/2026';
@@ -134,8 +172,9 @@ if ($method === 'GET') {
             "data" => $settings
         ]);
     } catch (PDOException $e) {
+        error_log($e->getMessage());
         http_response_code(500);
-        echo json_encode(["status" => "error", "message" => $e->getMessage()]);
+        echo json_encode(["status" => "error", "message" => "Terjadi kesalahan server saat memproses data."]);
     }
 } elseif ($method === 'POST') {
     $keys_to_save = [
@@ -180,8 +219,9 @@ if ($method === 'GET') {
             "message" => "Pengaturan halaman utama & kontak sekolah berhasil diperbarui."
         ]);
     } catch (PDOException $e) {
+        error_log($e->getMessage());
         http_response_code(500);
-        echo json_encode(["status" => "error", "message" => $e->getMessage()]);
+        echo json_encode(["status" => "error", "message" => "Terjadi kesalahan server saat memproses data."]);
     }
 } else {
     http_response_code(405);

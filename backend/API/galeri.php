@@ -30,8 +30,9 @@ if ($method === 'GET') {
         foto_map_rows($items);
         echo json_encode(["status" => "success", "data" => $items]);
     } catch (PDOException $e) {
+        error_log($e->getMessage());
         http_response_code(500);
-        echo json_encode(["status" => "error", "message" => $e->getMessage()]);
+        echo json_encode(["status" => "error", "message" => "Terjadi kesalahan server saat memproses data."]);
     }
 } 
 elseif ($method === 'POST') {

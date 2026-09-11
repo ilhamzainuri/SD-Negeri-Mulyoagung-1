@@ -20,6 +20,7 @@ import { API_BASE_URL, getImageUrl, apiFetch } from '../config/api';
 import { Pagination } from './common/Pagination';
 import { useDebounce } from '../hooks/useDebounce';
 import { SCHOOL_FACILITIES } from '../data/schoolData';
+import { sanitizeHtml } from '../utils/sanitize';
 
 const ITEMS_PER_PAGE = 6;
 
@@ -277,7 +278,7 @@ export const FasilitasSection: React.FC<FasilitasSectionProps> = ({
                       </h3>
                       <div
                         className="text-slate-500 text-xs sm:text-sm line-clamp-2 leading-relaxed break-words"
-                        dangerouslySetInnerHTML={{ __html: fac.deskripsi }}
+                        dangerouslySetInnerHTML={{ __html: sanitizeHtml(fac.deskripsi) }}
                       />
                     </div>
                   </div>
@@ -371,7 +372,7 @@ export const FasilitasSection: React.FC<FasilitasSectionProps> = ({
 
                 <div
                   className="prose max-w-none text-slate-700 text-xs sm:text-base leading-relaxed break-words"
-                  dangerouslySetInnerHTML={{ __html: selectedFacility.deskripsi }}
+                  dangerouslySetInnerHTML={{ __html: sanitizeHtml(selectedFacility.deskripsi) }}
                 />
               </div>
 

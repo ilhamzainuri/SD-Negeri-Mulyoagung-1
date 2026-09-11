@@ -3,6 +3,18 @@ require_once __DIR__ . '/../config/koneksi.php';
 
 header("Content-Type: application/json");
 
+// Proteksi akses migrasi database (hanya CLI, localhost, atau key otorisasi)
+$isCli = (php_sapi_name() === 'cli');
+$clientIp = $_SERVER['REMOTE_ADDR'] ?? '';
+$isLocal = in_array($clientIp, ['127.0.0.1', '::1', 'localhost'], true);
+$authKey = $_GET['key'] ?? ($_POST['key'] ?? '');
+
+if (!$isCli && !$isLocal && $authKey !== 'sdn1mulyoagung_migrate_2026') {
+    http_response_code(403);
+    echo json_encode(["status" => "error", "message" => "Akses migrasi database ditolak."]);
+    exit();
+}
+
 $response = [
     "status" => "success",
     "message" => "Database berhasil diperbaiki dan dimigrasikan secara lengkap.",

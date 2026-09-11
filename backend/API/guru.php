@@ -66,8 +66,9 @@ if ($method === 'GET') {
 
         echo json_encode(["status" => "success", "data" => array_values($teachers)]);
     } catch (PDOException $e) {
+        error_log($e->getMessage());
         http_response_code(500);
-        echo json_encode(["status" => "error", "message" => $e->getMessage()]);
+        echo json_encode(["status" => "error", "message" => "Terjadi kesalahan server saat memproses data."]);
     }
 } 
 elseif ($method === 'POST') {

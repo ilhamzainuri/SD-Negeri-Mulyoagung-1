@@ -35,8 +35,9 @@ if ($method === 'GET') {
         foto_map_rows($data);
         echo json_encode(["status" => "success", "data" => $data]);
     } catch (PDOException $e) {
+        error_log($e->getMessage());
         http_response_code(500);
-        echo json_encode(["status" => "error", "message" => $e->getMessage()]);
+        echo json_encode(["status" => "error", "message" => "Terjadi kesalahan server saat memproses data."]);
     }
 } 
 elseif ($method === 'POST') {
@@ -137,8 +138,9 @@ elseif ($method === 'POST') {
             echo json_encode(["status" => "success", "message" => "Foto carousel hero baru berhasil ditambahkan."]);
         }
     } catch (PDOException $e) {
+        error_log($e->getMessage());
         http_response_code(500);
-        echo json_encode(["status" => "error", "message" => $e->getMessage()]);
+        echo json_encode(["status" => "error", "message" => "Terjadi kesalahan server saat memproses data."]);
     }
 } else {
     http_response_code(405);

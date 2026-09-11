@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { X, Calendar, ArrowRight, Share2 } from 'lucide-react';
 import { GalleryItem } from '../../types';
+import { sanitizeHtml } from '../../utils/sanitize';
 
 interface PhotoLightboxModalProps {
   photo: GalleryItem | null;
@@ -84,7 +85,7 @@ export const PhotoLightboxModal: React.FC<PhotoLightboxModalProps> = ({ photo, o
           {photo.description ? (
             <div 
               className="space-y-3 sm:space-y-4 text-slate-700 dark:text-slate-300 text-xs sm:text-base leading-relaxed prose prose-slate max-w-none"
-              dangerouslySetInnerHTML={{ __html: photo.description }}
+              dangerouslySetInnerHTML={{ __html: sanitizeHtml(photo.description) }}
             />
           ) : (
             <p className="italic text-slate-400 text-xs sm:text-sm">Dokumentasi foto kegiatan SD Negeri 1 Mulyoagung.</p>

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { X, ExternalLink } from 'lucide-react';
 import { API_BASE_URL, getImageUrl, apiFetch } from '../config/api';
+import { sanitizeHtml } from '../utils/sanitize';
 
 export const AnnouncementPopup: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -159,7 +160,7 @@ export const AnnouncementPopup: React.FC = () => {
             </h2>
             <div
               className="text-slate-600 text-xs sm:text-sm leading-relaxed prose prose-slate max-w-none break-words"
-              dangerouslySetInnerHTML={{ __html: data.isi }}
+              dangerouslySetInnerHTML={{ __html: sanitizeHtml(data.isi) }}
             />
           </div>
 

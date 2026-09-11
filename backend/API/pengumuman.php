@@ -50,8 +50,9 @@ if ($method === 'GET') {
             echo json_encode(["status" => "error", "message" => "Data pengumuman tidak ditemukan."]);
         }
     } catch (PDOException $e) {
+        error_log($e->getMessage());
         http_response_code(500);
-        echo json_encode(["status" => "error", "message" => $e->getMessage()]);
+        echo json_encode(["status" => "error", "message" => "Terjadi kesalahan server saat memproses data."]);
     }
 } 
 elseif ($method === 'POST') {
@@ -97,8 +98,9 @@ elseif ($method === 'POST') {
         }
         echo json_encode(["status" => "success", "message" => "Pengumuman Penting berhasil diperbarui."]);
     } catch (PDOException $e) {
+        error_log($e->getMessage());
         http_response_code(500);
-        echo json_encode(["status" => "error", "message" => $e->getMessage()]);
+        echo json_encode(["status" => "error", "message" => "Terjadi kesalahan server saat memproses data."]);
     }
 } else {
     http_response_code(405);

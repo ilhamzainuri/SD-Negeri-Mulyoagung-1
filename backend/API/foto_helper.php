@@ -102,15 +102,52 @@ function foto_map_rows(&$rows) {
     unset($row);
 }
 
-// Cek apakah field file terunggah dengan benar dan memenuhi validasi (maks 10MB, format gambar).
+// Cek apakah field file terunggah dengan benar dan memenuhi validasi (maks 10MB, format gambar/PDF aman).
 function foto_has_upload($field) {
     if (!isset($_FILES[$field]) || $_FILES[$field]['error'] !== UPLOAD_ERR_OK) {
         return false;
     }
     // Batas 10MB
-    if ($_FILES[$field]['size'] > 10 * 1024 * 1024) {
+    if ($_FILES[$field]['size'] > 10 * 1024 * 1024 || $_FILES[$field]['size'] <= 0) {
         return false;
     }
+
+    $filename = $_FILES[$field]['name'];
+    $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+    $allowed_extensions = ['jpg', 'jpeg', 'png', 'webp', 'gif', 'pdf'];
+    if (!in_array($ext, $allowed_extensions, true)) {
+        return false;
+    }
+
+    $tmpPath = $_FILES[$field]['tmp_name'];
+    if (!is_uploaded_file($tmpPath)) {
+        return false;
+    }
+
+    $allowed_mimes = [
+        'image/jpeg',
+        'image/png',
+        'image/webp',
+        'image/gif',
+        'application/pdf',
+        'application/x-pdf',
+    ];
+
+    $mime = '';
+    if (function_exists('finfo_open')) {
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        if ($finfo) {
+            $mime = finfo_file($finfo, $tmpPath);
+            finfo_close($finfo);
+        }
+    } elseif (function_exists('mime_content_type')) {
+        $mime = mime_content_type($tmpPath);
+    }
+
+    if (!empty($mime) && !in_array(strtolower($mime), $allowed_mimes, true)) {
+        return false;
+    }
+
     return true;
 }
 

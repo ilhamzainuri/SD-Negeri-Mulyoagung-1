@@ -1,6 +1,7 @@
 import React from 'react';
 import { Calendar, Maximize2, Share2 } from 'lucide-react';
 import { GalleryItem } from '../../types';
+import { sanitizeHtml } from '../../utils/sanitize';
 
 interface GalleryCardProps {
   item: GalleryItem;
@@ -52,7 +53,7 @@ export const GalleryCard: React.FC<GalleryCardProps> = ({ item, onClick }) => {
           {item.description && (
             <p 
               className="text-slate-500 text-xs sm:text-sm line-clamp-2 leading-relaxed"
-              dangerouslySetInnerHTML={{ __html: item.description }}
+              dangerouslySetInnerHTML={{ __html: sanitizeHtml(item.description) }}
             />
           )}
         </div>

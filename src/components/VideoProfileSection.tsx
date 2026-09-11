@@ -93,7 +93,7 @@ export const VideoProfileSection: React.FC = () => {
           ) : (
             <div className="w-full h-full relative group cursor-pointer" onClick={() => setIsPlaying(true)}>
               <img
-                src={`https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`}
+                src={`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`}
                 alt="Video Profil Thumbnail"
                 className="w-full h-full object-cover"
               />

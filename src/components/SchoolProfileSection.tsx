@@ -4,6 +4,7 @@ import { Target, Compass, History, Monitor, BookOpen, Activity, HeartPulse, Coff
 import { SCHOOL_FACILITIES } from '../data/schoolData';
 import { API_BASE_URL, getImageUrl, apiFetch } from '../config/api';
 import { useHomepageConfig } from '../hooks/useHomepageConfig';
+import { sanitizeHtml } from '../utils/sanitize';
 
 interface DynamicFacility {
   id: string | number;
@@ -160,7 +161,7 @@ export const SchoolProfileSection: React.FC = () => {
               <div className="relative overflow-hidden rounded-xl p-3 sm:p-5 bg-gradient-to-r from-teal-50/90 to-teal-50/40 border border-teal-100/80">
                 <div 
                   className="text-[11px] sm:text-lg text-slate-800 font-bold leading-snug sm:leading-relaxed border-l-2 sm:border-l-4 border-[#028C84] pl-2.5 sm:pl-4 prose prose-slate max-w-none break-words"
-                  dangerouslySetInnerHTML={{ __html: homepageConfig.visi }}
+                  dangerouslySetInnerHTML={{ __html: sanitizeHtml(homepageConfig.visi) }}
                 />
               </div>
             </div>
@@ -207,7 +208,7 @@ export const SchoolProfileSection: React.FC = () => {
 
             <div 
               className="prose max-w-none text-slate-700 text-[11px] sm:text-base leading-snug sm:leading-relaxed break-words"
-              dangerouslySetInnerHTML={{ __html: homepageConfig.sejarah }}
+              dangerouslySetInnerHTML={{ __html: sanitizeHtml(homepageConfig.sejarah) }}
             />
           </div>
         )}
@@ -240,7 +241,7 @@ export const SchoolProfileSection: React.FC = () => {
                     </h4>
                     <p 
                       className="text-[10px] xs:text-[11px] sm:text-sm text-slate-600 leading-snug mt-1 sm:mt-2 line-clamp-2 sm:line-clamp-3 break-words"
-                      dangerouslySetInnerHTML={{ __html: fac.deskripsi }}
+                      dangerouslySetInnerHTML={{ __html: sanitizeHtml(fac.deskripsi) }}
                     />
                   </div>
                 </div>
@@ -290,7 +291,7 @@ export const SchoolProfileSection: React.FC = () => {
               </div>
               <div 
                 className="text-sm sm:text-base text-slate-600 leading-relaxed prose prose-slate max-w-none"
-                dangerouslySetInnerHTML={{ __html: selectedFacility.deskripsi }}
+                dangerouslySetInnerHTML={{ __html: sanitizeHtml(selectedFacility.deskripsi) }}
               />
             </div>
           </div>

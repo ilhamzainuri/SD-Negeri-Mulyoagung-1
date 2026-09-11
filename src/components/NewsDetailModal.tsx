@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { X, Calendar, Share2, ArrowRight } from 'lucide-react';
 import { Article } from '../types';
 import { stripHtml } from '../utils/helpers';
+import { sanitizeHtml } from '../utils/sanitize';
 
 interface NewsDetailModalProps {
   article: Article | null;
@@ -88,7 +89,7 @@ export const NewsDetailModal: React.FC<NewsDetailModalProps> = ({ article, onClo
           </p>
           <div 
             className="space-y-3 sm:space-y-4 text-slate-700 dark:text-slate-300 text-xs sm:text-base leading-relaxed prose prose-slate max-w-none break-words"
-            dangerouslySetInnerHTML={{ __html: article.content }}
+            dangerouslySetInnerHTML={{ __html: sanitizeHtml(article.content) }}
           />
         </div>
 

@@ -8,6 +8,7 @@ import { API_BASE_URL, getImageUrl, apiFetch } from '../config/api';
 import { useHomepageConfig } from '../hooks/useHomepageConfig';
 import { useDebounce } from '../hooks/useDebounce';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { sanitizeHtml } from '../utils/sanitize';
 
 interface NewsSectionProps {
   onViewAllClick?: () => void;
@@ -290,7 +291,7 @@ export const NewsSection: React.FC<NewsSectionProps> = () => {
                   {article.summary && (
                     <p
                       className="text-slate-500 text-xs sm:text-sm line-clamp-2 leading-relaxed break-words"
-                      dangerouslySetInnerHTML={{ __html: article.summary }}
+                      dangerouslySetInnerHTML={{ __html: sanitizeHtml(article.summary) }}
                     />
                   )}
                 </div>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { PRINCIPAL_INFO } from '../data/schoolData';
 import { Quote } from 'lucide-react';
 import { API_BASE_URL, getImageUrl, apiFetch } from '../config/api';
+import { sanitizeHtml } from '../utils/sanitize';
 
 export const PrincipalGreeting: React.FC = () => {
   const [data, setData] = useState({
@@ -88,7 +89,7 @@ export const PrincipalGreeting: React.FC = () => {
                 <div className="absolute left-0 top-0 bottom-0 w-1 sm:w-1.5 bg-gradient-to-b from-slate-400 to-slate-200 rounded-l-xl sm:rounded-l-2xl opacity-80"></div>
                 <div
                   className="text-slate-700 text-xs sm:text-lg leading-relaxed font-medium text-center lg:text-left prose prose-slate max-w-none break-words"
-                  dangerouslySetInnerHTML={{ __html: data.greeting }}
+                  dangerouslySetInnerHTML={{ __html: sanitizeHtml(data.greeting) }}
                 />
               </div>
 
