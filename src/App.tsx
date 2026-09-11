@@ -42,7 +42,7 @@ const GlobalSearchModal = lazy(() => import('./components/GlobalSearchModal').th
 const Dashboard = lazy(() => import('./CMS/Dashboard'));
 
 import { LoadingProvider } from './context/LoadingContext';
-import { API_BASE_URL } from './config/api';
+import { API_BASE_URL, apiFetch } from './config/api';
 import { useHomepageConfig } from './hooks/useHomepageConfig';
 
 function AppContent() {
@@ -57,8 +57,7 @@ function AppContent() {
   useEffect(() => {
     const fetchSettings = async () => {
       try {
-        // ✅ BENAR (API_BASE_URL sudah berakhiran /backend/API)
-        const response = await fetch(`${API_BASE_URL}/pengaturan.php`); 
+        const response = await apiFetch(`${API_BASE_URL}/pengaturan.php`); 
         const data = await response.json();
         if (data.status === 'success' && data.link_ppdb) {
           setLinkPpdb(data.link_ppdb.trim());

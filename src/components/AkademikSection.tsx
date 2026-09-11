@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ExternalLink, BookOpen, ArrowLeft, Layers, ShieldCheck, Sparkles, LayoutGrid, List, Share2, Check } from 'lucide-react';
 import { AkademikMenuItem } from '../types';
-import { API_BASE_URL } from '../config/api';
+import { API_BASE_URL, apiFetch } from '../config/api';
 import { getGoogleDriveEmbedUrl, DriveViewMode } from '../utils/helpers';
 import { ModulPembelajaranSection } from './ModulPembelajaranSection';
 
@@ -18,7 +18,7 @@ export const AkademikSection: React.FC = () => {
     const fetchMenu = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`${API_BASE_URL}/akademik_menu.php`);
+        const res = await apiFetch(`${API_BASE_URL}/akademik_menu.php`);
         const json = await res.json();
         if (json.status === 'success' && Array.isArray(json.data)) {
           setItems(json.data);

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom'; // <-- TAMBAHAN IMPORT
 import { Target, Compass, History, Monitor, BookOpen, Activity, HeartPulse, Coffee, Trees, CheckCircle2, Sparkles, Building, X } from 'lucide-react'; // <-- TAMBAHAN ICON X
 import { SCHOOL_FACILITIES } from '../data/schoolData';
-import { API_BASE_URL, getImageUrl } from '../config/api';
+import { API_BASE_URL, getImageUrl, apiFetch } from '../config/api';
 import { useHomepageConfig } from '../hooks/useHomepageConfig';
 
 interface DynamicFacility {
@@ -29,7 +29,7 @@ export const SchoolProfileSection: React.FC = () => {
   useEffect(() => {
     const fetchFacilities = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/fasilitas.php`);
+        const response = await apiFetch(`${API_BASE_URL}/fasilitas.php`);
         const result = await response.json();
         if (result.status === 'success' && Array.isArray(result.data) && result.data.length > 0) {
           setFacilities(result.data);

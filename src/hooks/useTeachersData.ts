@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { TEACHERS_DIRECTORY } from '../data/schoolData';
 import { Teacher } from '../types';
-import { API_BASE_URL, getImageUrl } from '../config/api';
+import { API_BASE_URL, getImageUrl, apiFetch } from '../config/api';
 
 /**
  * Mengambil data guru/tendik dari backend (guru.php).
@@ -14,14 +14,9 @@ export const useTeachersData = (): Teacher[] => {
   const [teachers, setTeachers] = useState<Teacher[]>(cachedTeachers || []);
 
   useEffect(() => {
-    if (cachedTeachers) {
-      setTeachers(cachedTeachers);
-      return;
-    }
-
     const loadTeachers = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/guru.php`);
+        const response = await apiFetch(`${API_BASE_URL}/guru.php`);
         const result = await response.json();
 
         if (result.status === 'success' && result.data && result.data.length > 0) {
@@ -42,13 +37,15 @@ export const useTeachersData = (): Teacher[] => {
           }));
           cachedTeachers = mapped;
           setTeachers(mapped);
-        } else {
+        } else if (!cachedTeachers) {
           cachedTeachers = TEACHERS_DIRECTORY;
           setTeachers(TEACHERS_DIRECTORY);
         }
       } catch (e) {
-        cachedTeachers = TEACHERS_DIRECTORY;
-        setTeachers(TEACHERS_DIRECTORY);
+        if (!cachedTeachers) {
+          cachedTeachers = TEACHERS_DIRECTORY;
+          setTeachers(TEACHERS_DIRECTORY);
+        }
       }
     };
 

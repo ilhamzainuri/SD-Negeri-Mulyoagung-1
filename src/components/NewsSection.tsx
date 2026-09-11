@@ -4,7 +4,7 @@ import { NEWS_ARTICLES } from '../data/schoolData';
 import { Article } from '../types';
 import { NewsDetailModal } from './NewsDetailModal';
 import { Pagination } from './common/Pagination';
-import { API_BASE_URL, getImageUrl } from '../config/api';
+import { API_BASE_URL, getImageUrl, apiFetch } from '../config/api';
 import { useHomepageConfig } from '../hooks/useHomepageConfig';
 import { useDebounce } from '../hooks/useDebounce';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -55,14 +55,9 @@ export const NewsSection: React.FC<NewsSectionProps> = () => {
   };
 
   useEffect(() => {
-    if (cachedArticles) {
-      setArticles(cachedArticles);
-      return;
-    }
-
     const loadNews = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/newsAPI.php`);
+        const response = await apiFetch(`${API_BASE_URL}/newsAPI.php`);
         const result = await response.json();
         if (result.status === 'success' && result.data && result.data.length > 0) {
           const mapped: Article[] = result.data.map((art: any) => {
@@ -82,15 +77,18 @@ export const NewsSection: React.FC<NewsSectionProps> = () => {
           });
           cachedArticles = mapped;
           setArticles(mapped);
-        } else {
+        } else if (!cachedArticles) {
           cachedArticles = NEWS_ARTICLES;
           setArticles(NEWS_ARTICLES);
         }
-      } catch (e) {
-        cachedArticles = NEWS_ARTICLES;
-        setArticles(NEWS_ARTICLES);
+      } catch (err) {
+        if (!cachedArticles) {
+          cachedArticles = NEWS_ARTICLES;
+          setArticles(NEWS_ARTICLES);
+        }
       }
     };
+
     loadNews();
   }, []);
 

@@ -20,7 +20,7 @@ import {
   Mail,
   Layers,
 } from 'lucide-react';
-import { API_BASE_URL, getImageUrl } from '../config/api';
+import { API_BASE_URL, getImageUrl, apiFetch } from '../config/api';
 import { NEWS_ARTICLES, GALLERY_ITEMS, TEACHERS_DIRECTORY, SCHOOL_FACILITIES } from '../data/schoolData';
 
 interface GlobalSearchModalProps {
@@ -220,7 +220,7 @@ export const GlobalSearchModal: React.FC<GlobalSearchModalProps> = ({ isOpen, on
     const fetchSearch = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`${API_BASE_URL}/search.php?q=${encodeURIComponent(q)}`);
+        const res = await apiFetch(`${API_BASE_URL}/search.php?q=${encodeURIComponent(q)}`);
         const json = await res.json();
         if (isMounted && json.status === 'success' && json.data) {
           const apiData = json.data;

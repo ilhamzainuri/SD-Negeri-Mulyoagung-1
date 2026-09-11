@@ -8,7 +8,7 @@ import { DesktopNav } from './header/DesktopNav';
 import { HeaderActions } from './header/HeaderActions';
 import { MobileMenuButton } from './header/MobileMenuButton';
 import { MobileNavDrawer } from './header/MobileNavDrawer';
-import { API_BASE_URL } from '../config/api';
+import { API_BASE_URL, apiFetch } from '../config/api';
 
 interface HeaderProps {
   activeTab: NavTab;
@@ -27,7 +27,7 @@ export const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab, onOpenP
   useEffect(() => {
     const fetchAkademikMenu = async () => {
       try {
-        const res = await fetch(`${API_BASE_URL}/akademik_menu.php`);
+        const res = await apiFetch(`${API_BASE_URL}/akademik_menu.php`);
         const json = await res.json();
         if (json.status === 'success' && Array.isArray(json.data)) {
           setAkademikMenu(json.data);

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { BookOpen, Search, Filter, Download, ExternalLink, Eye, RotateCcw, X, FileText, Calendar, Layers } from 'lucide-react';
-import { API_BASE_URL, getImageUrl } from '../config/api';
+import { API_BASE_URL, getImageUrl, apiFetch } from '../config/api';
 import { Pagination } from './common/Pagination';
 import { ModulPreviewModal } from '../CMS/modul/ModulPreviewModal';
 import { ModulItem } from '../CMS/hooks/useModulData';
@@ -40,7 +40,7 @@ export const ModulPembelajaranSection: React.FC = () => {
     const fetchPublicModules = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`${API_BASE_URL}/modul_pembelajaran.php`);
+        const res = await apiFetch(`${API_BASE_URL}/modul_pembelajaran.php`);
         const json = await res.json();
         if (json.status === 'success' && Array.isArray(json.data)) {
           setModules(json.data);

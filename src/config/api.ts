@@ -37,6 +37,27 @@ export const getApiBaseUrl = (): string => `${SITE_ORIGIN}/backend/API`;
 export const API_BASE_URL = getApiBaseUrl();
 
 /**
+ * Global fetch wrapper that bypasses browser and intermediate HTTP caching
+ */
+export const apiFetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
+  const headers = new Headers(init?.headers);
+  headers.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+  headers.set('Pragma', 'no-cache');
+
+  let url = input;
+  if (typeof input === 'string') {
+    const separator = input.includes('?') ? '&' : '?';
+    url = `${input}${separator}_t=${Date.now()}`;
+  }
+
+  return fetch(url, {
+    ...init,
+    cache: 'no-store',
+    headers,
+  });
+};
+
+/**
  * Returns full asset image URL handling local backend uploads and absolute URLs
  */
 export const getImageUrl = (imagePath: string | null | undefined): string => {

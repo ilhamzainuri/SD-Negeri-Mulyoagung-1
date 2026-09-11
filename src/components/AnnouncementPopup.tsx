@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { X, ExternalLink } from 'lucide-react';
-import { API_BASE_URL, getImageUrl } from '../config/api';
+import { API_BASE_URL, getImageUrl, apiFetch } from '../config/api';
 
 export const AnnouncementPopup: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const activeKeyRef = useRef<string>('seen_announcement_1');
   const [data, setData] = useState<{
     judul: string;
     isi: string;
@@ -45,7 +46,7 @@ export const AnnouncementPopup: React.FC = () => {
   useEffect(() => {
     const fetchAnnouncement = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/pengumuman.php`);
+        const response = await apiFetch(`${API_BASE_URL}/pengumuman.php`);
         const result = await response.json();
         if (result.status === 'success' && result.data) {
           const isActivePublic = result.data.public_active !== undefined
@@ -66,8 +67,11 @@ export const AnnouncementPopup: React.FC = () => {
           };
           setData(config);
 
+          const contentKey = `seen_announcement_${result.data.id || '1'}_${encodeURIComponent((result.data.judul || '') + '_' + (result.data.tanggal_selesai || ''))}`;
+          activeKeyRef.current = contentKey;
+
           // Check if user has already dismissed this specific announcement in this session
-          const hasSeen = sessionStorage.getItem(`seen_announcement_${result.data.id || '1'}`);
+          const hasSeen = sessionStorage.getItem(contentKey);
           if (config.is_active && config.show_popup && !hasSeen) {
             // Short delay to let the page load nicely
             setTimeout(() => {
@@ -84,7 +88,7 @@ export const AnnouncementPopup: React.FC = () => {
 
   const handleClose = () => {
     setIsOpen(false);
-    sessionStorage.setItem(`seen_announcement_1`, 'true');
+    sessionStorage.setItem(activeKeyRef.current, 'true');
   };
 
   if (!isOpen || !data) return null;

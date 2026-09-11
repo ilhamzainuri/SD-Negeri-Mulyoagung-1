@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { GALLERY_ITEMS } from '../data/schoolData';
 import { GalleryItem } from '../types';
-import { API_BASE_URL, getImageUrl } from '../config/api';
+import { API_BASE_URL, getImageUrl, apiFetch } from '../config/api';
 import { DEFAULT_GALLERY_IMAGE } from '../utils/galleryHelpers';
 
 /**
@@ -15,14 +15,9 @@ export const useGalleryData = (): GalleryItem[] => {
   const [galleryItems, setGalleryItems] = useState<GalleryItem[]>(cachedGalleryItems || []);
 
   useEffect(() => {
-    if (cachedGalleryItems) {
-      setGalleryItems(cachedGalleryItems);
-      return;
-    }
-
     const loadGallery = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/galeri.php`);
+        const response = await apiFetch(`${API_BASE_URL}/galeri.php`);
         const result = await response.json();
 
         if (result.status === 'success' && result.data && result.data.length > 0) {
@@ -36,13 +31,15 @@ export const useGalleryData = (): GalleryItem[] => {
           }));
           cachedGalleryItems = mapped;
           setGalleryItems(mapped);
-        } else {
+        } else if (!cachedGalleryItems) {
           cachedGalleryItems = GALLERY_ITEMS;
           setGalleryItems(GALLERY_ITEMS);
         }
       } catch (e) {
-        cachedGalleryItems = GALLERY_ITEMS;
-        setGalleryItems(GALLERY_ITEMS);
+        if (!cachedGalleryItems) {
+          cachedGalleryItems = GALLERY_ITEMS;
+          setGalleryItems(GALLERY_ITEMS);
+        }
       }
     };
 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { API_BASE_URL } from '../config/api';
+import { API_BASE_URL, apiFetch } from '../config/api';
 
 export interface HomepageSection {
   key: string;
@@ -76,7 +76,7 @@ export const useHomepageConfig = (): HomepageConfig => {
   useEffect(() => {
     const fetchConfig = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/pengaturan.php`);
+        const response = await apiFetch(`${API_BASE_URL}/pengaturan.php`);
         const result = await response.json();
 
         if (result.status === 'success') {

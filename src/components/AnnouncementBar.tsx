@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Megaphone, X } from 'lucide-react';
-import { API_BASE_URL } from '../config/api';
+import { API_BASE_URL, apiFetch } from '../config/api';
 
 export const AnnouncementBar: React.FC = () => {
   const [runningText, setRunningText] = useState('');
@@ -10,7 +10,7 @@ export const AnnouncementBar: React.FC = () => {
   useEffect(() => {
     const fetchAnnouncement = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/pengumuman.php`);
+        const response = await apiFetch(`${API_BASE_URL}/pengumuman.php`);
         const result = await response.json();
         if (result.status === 'success' && result.data) {
           const isActivePublic = result.data.public_active !== undefined

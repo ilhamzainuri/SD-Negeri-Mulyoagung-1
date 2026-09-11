@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Users, GraduationCap, Award, CheckCircle2 } from 'lucide-react';
-import { API_BASE_URL } from '../config/api';
+import { API_BASE_URL, apiFetch } from '../config/api';
 
 // 1. Definisikan tipe data
 interface StatData {
@@ -94,8 +94,8 @@ export const Stats: React.FC = () => {
     const fetchStats = async () => {
       try {
         const [responseStats, responseGuru] = await Promise.all([
-          fetch(`${API_BASE_URL}/statistik.php`),
-          fetch(`${API_BASE_URL}/guru.php`)
+          apiFetch(`${API_BASE_URL}/statistik.php`),
+          apiFetch(`${API_BASE_URL}/guru.php`)
         ]);
 
         const resultStats = await responseStats.json();

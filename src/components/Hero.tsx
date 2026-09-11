@@ -3,7 +3,7 @@ import { ArrowRight, BookOpen, Sparkles, ChevronLeft, ChevronRight } from 'lucid
 import { NavTab } from '../types';
 import heroImg from '../assets/images/img1.webp';
 import heroImg1 from '../assets/images/img2.webp';
-import { API_BASE_URL, getImageUrl } from '../config/api';
+import { API_BASE_URL, getImageUrl, apiFetch } from '../config/api';
 import { ShinyText } from './common/ShinyText';
 import { useHomepageConfig } from '../hooks/useHomepageConfig';
 
@@ -85,7 +85,7 @@ export const Hero: React.FC<HeroProps> = ({
   useEffect(() => {
     const fetchTahunAjaran = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/pengaturan.php`);
+        const response = await apiFetch(`${API_BASE_URL}/pengaturan.php`);
         const data = await response.json();
         if (data.status === 'success') {
           if (data.tahun_ajaran) setTahunAjaran(data.tahun_ajaran);
@@ -98,7 +98,7 @@ export const Hero: React.FC<HeroProps> = ({
 
     const fetchHeroPhotos = async () => {
       try {
-        const res = await fetch(`${API_BASE_URL}/hero_carousel.php`);
+        const res = await apiFetch(`${API_BASE_URL}/hero_carousel.php`);
         const json = await res.json();
         if (json.status === 'success' && Array.isArray(json.data) && json.data.length > 0) {
           const customSlides = json.data.map((item: any) => ({

@@ -16,7 +16,7 @@ import {
   Sparkles,
   Layers,
 } from 'lucide-react';
-import { API_BASE_URL, getImageUrl } from '../config/api';
+import { API_BASE_URL, getImageUrl, apiFetch } from '../config/api';
 import { Pagination } from './common/Pagination';
 import { useDebounce } from '../hooks/useDebounce';
 import { SCHOOL_FACILITIES } from '../data/schoolData';
@@ -62,7 +62,7 @@ export const FasilitasSection: React.FC<FasilitasSectionProps> = ({
     const fetchFacilities = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`${API_BASE_URL}/fasilitas.php`);
+        const res = await apiFetch(`${API_BASE_URL}/fasilitas.php`);
         const json = await res.json();
         if (json.status === 'success' && Array.isArray(json.data) && json.data.length > 0) {
           setFacilities(json.data);

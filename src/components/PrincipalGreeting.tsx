@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { PRINCIPAL_INFO } from '../data/schoolData';
 import { Quote } from 'lucide-react';
-import { API_BASE_URL, getImageUrl } from '../config/api';
+import { API_BASE_URL, getImageUrl, apiFetch } from '../config/api';
 
 export const PrincipalGreeting: React.FC = () => {
   const [data, setData] = useState({
@@ -13,7 +13,7 @@ export const PrincipalGreeting: React.FC = () => {
   useEffect(() => {
     const fetchGreeting = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/sambutan.php`);
+        const response = await apiFetch(`${API_BASE_URL}/sambutan.php`);
         const result = await response.json();
         if (result.status === 'success' && result.data) {
           setData({
