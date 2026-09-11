@@ -17,7 +17,15 @@ if (!file_exists($upload_dir)) {
 
 $method = $_SERVER['REQUEST_METHOD'];
 
+$authUser = getAuthUser();
+
 if ($method === 'GET') {
+    if (!$authUser || $authUser['role'] !== 'ADMIN') {
+        http_response_code(403);
+        echo json_encode(["status" => "error", "message" => "Akses ditolak: Hanya Admin yang diizinkan."]);
+        exit();
+    }
+
     try {
         $stmt = $conn->query("SELECT id, username, password, role, nama_penanggung_jawab, foto, foto_crop FROM users ORDER BY id DESC");
         $users = $stmt->fetchAll();
@@ -28,14 +36,26 @@ if ($method === 'GET') {
         foto_map_rows($users);
         echo json_encode(["status" => "success", "data" => $users]);
     } catch (PDOException $e) {
+        error_log($e->getMessage());
         http_response_code(500);
-        echo json_encode(["status" => "error", "message" => $e->getMessage()]);
+        echo json_encode(["status" => "error", "message" => "Terjadi kesalahan server saat memproses data."]);
     }
 } 
 elseif ($method === 'POST') {
     $action = isset($_POST['action']) ? $_POST['action'] : '';
 
+    if (!$authUser) {
+        http_response_code(401);
+        echo json_encode(["status" => "error", "message" => "Sesi Anda telah berakhir. Silakan login kembali."]);
+        exit();
+    }
+
     if ($action === 'create') {
+        if ($authUser['role'] !== 'ADMIN') {
+            http_response_code(403);
+            echo json_encode(["status" => "error", "message" => "Akses ditolak: Hanya Admin yang dapat membuat user."]);
+            exit();
+        }
         $username = isset($_POST['username']) ? trim($_POST['username']) : '';
         $password = isset($_POST['password']) ? $_POST['password'] : '';
         $role = isset($_POST['role']) ? trim($_POST['role']) : 'GURU';
@@ -81,6 +101,12 @@ elseif ($method === 'POST') {
         $role = isset($_POST['role']) ? trim($_POST['role']) : '';
         $password = isset($_POST['password']) ? $_POST['password'] : '';
 
+        if ($authUser['role'] !== 'ADMIN' && $authUser['uid'] !== $id) {
+            http_response_code(403);
+            echo json_encode(["status" => "error", "message" => "Akses ditolak: Anda hanya dapat memperbarui profil Anda sendiri."]);
+            exit();
+        }
+
         if ($id === 0 || empty($username) || empty($nama)) {
             http_response_code(400);
             echo json_encode(["status" => "error", "message" => "Data tidak lengkap."]);
@@ -114,7 +140,7 @@ elseif ($method === 'POST') {
 
         [$foto_path, $foto_crop_path] = foto_handle_update($upload_dir, 'backend/uploads/profile/', $existing_user['foto'], $existing_user['foto_crop'] ?? '');
 
-        $final_role = empty($role) ? $existing_user['role'] : $role;
+        $final_role = ($authUser['role'] === 'ADMIN' && !empty($role)) ? $role : $existing_user['role'];
         
         try {
             if (!empty($password)) {
@@ -139,11 +165,18 @@ elseif ($method === 'POST') {
                 ]
             ]);
         } catch (PDOException $e) {
+            error_log($e->getMessage());
             http_response_code(500);
-            echo json_encode(["status" => "error", "message" => $e->getMessage()]);
+            echo json_encode(["status" => "error", "message" => "Terjadi kesalahan server saat memproses data."]);
         }
     } 
     elseif ($action === 'reset_password') {
+        if ($authUser['role'] !== 'ADMIN') {
+            http_response_code(403);
+            echo json_encode(["status" => "error", "message" => "Akses ditolak: Hanya Admin yang dapat mereset password user."]);
+            exit();
+        }
+
         $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
         if ($id === 0) {
             http_response_code(400);
@@ -178,11 +211,18 @@ elseif ($method === 'POST') {
                 "user" => $target_user
             ]);
         } catch (PDOException $e) {
+            error_log($e->getMessage());
             http_response_code(500);
-            echo json_encode(["status" => "error", "message" => $e->getMessage()]);
+            echo json_encode(["status" => "error", "message" => "Terjadi kesalahan server saat memproses data."]);
         }
     }
     elseif ($action === 'delete') {
+        if ($authUser['role'] !== 'ADMIN') {
+            http_response_code(403);
+            echo json_encode(["status" => "error", "message" => "Akses ditolak: Hanya Admin yang dapat menghapus user."]);
+            exit();
+        }
+
         $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
         if ($id === 0) {
             http_response_code(400);
@@ -204,8 +244,9 @@ elseif ($method === 'POST') {
             $stmt->execute([$id]);
             echo json_encode(["status" => "success", "message" => "User berhasil dihapus."]);
         } catch (PDOException $e) {
+            error_log($e->getMessage());
             http_response_code(500);
-            echo json_encode(["status" => "error", "message" => $e->getMessage()]);
+            echo json_encode(["status" => "error", "message" => "Terjadi kesalahan server saat memproses data."]);
         }
     } else {
         http_response_code(400);

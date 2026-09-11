@@ -20,7 +20,7 @@ import {
   Lightbulb,
   HelpCircle,
 } from 'lucide-react';
-import { getApiBaseUrl, getImageUrl } from '../config/api';
+import { getApiBaseUrl, getImageUrl, apiFetch } from '../config/api';
 import { UserSession, CmsTab } from './types';
 
 interface CmsOverviewDashboardProps {
@@ -136,19 +136,19 @@ export const CmsOverviewDashboard: React.FC<CmsOverviewDashboardProps> = ({
     try {
       // Parallel API calls using Promise.allSettled for maximum fault tolerance
       const promises: Promise<Response>[] = [
-        fetch(`${API_BASE}/newsAPI.php?status=all`),
-        fetch(`${API_BASE}/galeri.php?status=all`),
-        fetch(`${API_BASE}/modul_pembelajaran.php?status=all`),
-        fetch(`${API_BASE}/inovasi.php?status=all`),
+        apiFetch(`${API_BASE}/newsAPI.php?status=all`),
+        apiFetch(`${API_BASE}/galeri.php?status=all`),
+        apiFetch(`${API_BASE}/modul_pembelajaran.php?status=all`),
+        apiFetch(`${API_BASE}/inovasi.php?status=all`),
       ];
 
       if (isAdmin) {
         promises.push(
-          fetch(`${API_BASE}/guru.php`),
-          fetch(`${API_BASE}/users.php`),
-          fetch(`${API_BASE}/hero_carousel.php`),
-          fetch(`${API_BASE}/pengaturan.php`),
-          fetch(`${API_BASE}/statistik.php`),
+          apiFetch(`${API_BASE}/guru.php`),
+          apiFetch(`${API_BASE}/users.php`),
+          apiFetch(`${API_BASE}/hero_carousel.php`),
+          apiFetch(`${API_BASE}/pengaturan.php`),
+          apiFetch(`${API_BASE}/statistik.php`),
         );
       }
 

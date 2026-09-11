@@ -30,11 +30,15 @@ if ($fetchMode === 'navigate' || $fetchDest === 'document') {
 
 // ---- Cek 2: CORS — hanya origin yang dikenal ----
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+$currentHost = $_SERVER['HTTP_HOST'] ?? '';
 
 if (!empty($origin)) {
+    $originHost = parse_url($origin, PHP_URL_HOST) ?: '';
     $isAllowed = in_array($origin, $allowedOrigins, true) ||
+                 (!empty($currentHost) && ($originHost === $currentHost || $originHost === explode(':', $currentHost)[0])) ||
                  preg_match('/^https?:\/\/(localhost|127\.0\.0\.1|192\.168\.\d+\.\d+|10\.\d+\.\d+\.\d+)(:\d+)?$/i', $origin) ||
-                 preg_match('/^https?:\/\/[a-z0-9.-]+\.sch\.id$/i', $origin);
+                 preg_match('/^https?:\/\/[a-z0-9.-]+\.sch\.id$/i', $origin) ||
+                 preg_match('/^https?:\/\/[a-z0-9.-]+\.uydapz\.site$/i', $origin);
 
     if ($isAllowed) {
         header("Access-Control-Allow-Origin: $origin");
@@ -52,7 +56,7 @@ if (!empty($origin)) {
 // Tetap lanjut — karena require_once juga tidak mengirim Origin.
 // Proteksi utama untuk ini ada di layer .htaccess (IP restriction).
 
-header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
+header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With, X-CMS-Token");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Credentials: true");
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
@@ -111,5 +115,49 @@ try {
         "message" => "Database connection failed."
     ]);
     exit();
+}
+
+// =============================================================
+// HELPER TOKEN AUTENTIKASI CMS (HMAC-SHA256)
+// =============================================================
+
+function generateAuthToken($userId, $username, $role) {
+    $secret = getenv('DB_PASS') ?: 'sdn1_mulyoagung_app_secret_key_2026';
+    $payload = json_encode([
+        'uid' => (int)$userId,
+        'user' => $username,
+        'role' => $role,
+        'iat' => time(),
+        'exp' => time() + (86400 * 30),
+    ]);
+    $encodedPayload = base64_encode($payload);
+    $signature = hash_hmac('sha256', $encodedPayload, $secret);
+    return $encodedPayload . '.' . $signature;
+}
+
+function verifyAuthToken($token) {
+    if (empty($token)) return null;
+    $parts = explode('.', $token);
+    if (count($parts) !== 2) return null;
+    [$encodedPayload, $signature] = $parts;
+    $secret = getenv('DB_PASS') ?: 'sdn1_mulyoagung_app_secret_key_2026';
+    $expected = hash_hmac('sha256', $encodedPayload, $secret);
+    if (!hash_equals($expected, $signature)) return null;
+
+    $payload = json_decode(base64_decode($encodedPayload), true);
+    if (!$payload || !isset($payload['exp']) || $payload['exp'] < time()) {
+        return null;
+    }
+    return $payload;
+}
+
+function getAuthUser() {
+    $token = $_SERVER['HTTP_X_CMS_TOKEN'] ?? '';
+    if (empty($token) && !empty($_SERVER['HTTP_AUTHORIZATION'])) {
+        if (preg_match('/Bearer\s+(\S+)/i', $_SERVER['HTTP_AUTHORIZATION'], $m)) {
+            $token = $m[1];
+        }
+    }
+    return verifyAuthToken($token);
 }
 ?>

@@ -63,6 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($user && $is_authenticated) {
             $limiter->resetOnSuccess($clientIp);
             $foto_tampil = !empty($user['foto_crop']) ? $user['foto_crop'] : $user['foto'];
+            $token = generateAuthToken($user['id'], $user['username'], $user['role']);
             // Success login
             echo json_encode([
                 "status"  => "success",
@@ -73,7 +74,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     "role"                 => $user['role'],
                     "nama_penanggung_jawab" => $user['nama_penanggung_jawab'],
                     "foto"                 => $foto_tampil,
-                    "foto_original"        => $user['foto']
+                    "foto_original"        => $user['foto'],
+                    "token"                => $token
                 ]
             ]);
         } else {

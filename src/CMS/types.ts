@@ -5,6 +5,7 @@ export interface UserSession {
     nama_penanggung_jawab: string;
     foto: string;
     foto_original?: string;
+    token?: string;
 }
 
 

@@ -37,12 +37,37 @@ export const getApiBaseUrl = (): string => `${SITE_ORIGIN}/backend/API`;
 export const API_BASE_URL = getApiBaseUrl();
 
 /**
+ * Mendapatkan token autentikasi CMS dari localStorage jika user sedang login
+ */
+export const getCmsAuthToken = (): string => {
+  if (typeof window !== 'undefined') {
+    try {
+      const stored = localStorage.getItem('cms_user');
+      if (stored) {
+        const user = JSON.parse(stored);
+        return user.token || '';
+      }
+    } catch {
+      // ignore
+    }
+  }
+  return '';
+};
+
+/**
  * Global fetch wrapper that bypasses browser and intermediate HTTP caching
+ * and attaches CMS auth token if available
  */
 export const apiFetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
   const headers = new Headers(init?.headers);
   headers.set('Cache-Control', 'no-cache, no-store, must-revalidate');
   headers.set('Pragma', 'no-cache');
+
+  const token = getCmsAuthToken();
+  if (token) {
+    headers.set('X-CMS-Token', token);
+    headers.set('Authorization', `Bearer ${token}`);
+  }
 
   let url = input;
   if (typeof input === 'string') {

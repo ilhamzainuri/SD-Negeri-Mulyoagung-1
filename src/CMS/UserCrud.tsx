@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { User, Plus, Shield } from 'lucide-react';
-import { getApiBaseUrl } from '../config/api';
+import { getApiBaseUrl, apiFetch } from '../config/api';
 import { UserSession } from './types';
 import { useCmsFilter } from './hooks/useCmsFilter';
 import CmsFilterBar from './components/CmsFilterBar';
@@ -96,7 +96,7 @@ export default function UserCrud({ currentUser, onUpdateCurrentUser }: UserCrudP
     if (currentUser.role !== 'ADMIN') return;
     setLoading(true);
     try {
-      const response = await fetch(`${API_BASE}/users.php`);
+      const response = await apiFetch(`${API_BASE}/users.php`);
       const result = await response.json();
       if (result.status === 'success') {
         setUsers(result.data || []);
@@ -138,7 +138,7 @@ export default function UserCrud({ currentUser, onUpdateCurrentUser }: UserCrudP
     }
 
     try {
-      const response = await fetch(`${API_BASE}/users.php`, {
+      const response = await apiFetch(`${API_BASE}/users.php`, {
         method: 'POST',
         body: formData,
       });
@@ -181,7 +181,7 @@ export default function UserCrud({ currentUser, onUpdateCurrentUser }: UserCrudP
     }
 
     try {
-      const response = await fetch(`${API_BASE}/users.php`, {
+      const response = await apiFetch(`${API_BASE}/users.php`, {
         method: 'POST',
         body: formData,
       });
@@ -220,7 +220,7 @@ export default function UserCrud({ currentUser, onUpdateCurrentUser }: UserCrudP
         formData.append('id', id.toString());
 
         try {
-          const response = await fetch(`${API_BASE}/users.php`, {
+          const response = await apiFetch(`${API_BASE}/users.php`, {
             method: 'POST',
             body: formData,
           });
@@ -247,7 +247,7 @@ export default function UserCrud({ currentUser, onUpdateCurrentUser }: UserCrudP
     formData.append('id', user.id.toString());
 
     try {
-      const response = await fetch(`${API_BASE}/users.php`, {
+      const response = await apiFetch(`${API_BASE}/users.php`, {
         method: 'POST',
         body: formData,
       });

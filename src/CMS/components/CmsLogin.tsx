@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ArrowLeft, School, Eye, EyeOff, RotateCw, ShieldAlert, Clock } from 'lucide-react';
-import { getApiBaseUrl } from '../../config/api';
+import { getApiBaseUrl, apiFetch } from '../../config/api';
 import { UserSession } from '../types';
 import heroImg1 from '../../assets/images/img2.webp';
 import logoImg from '../../assets/images/logo.png';
@@ -79,7 +79,7 @@ export default function CmsLogin({ onLoginSuccess, onBackToHome }: CmsLoginProps
         }
 
         try {
-            const response = await fetch(`${API_BASE}/auth.php`, {
+            const response = await apiFetch(`${API_BASE}/auth.php`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
