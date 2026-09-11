@@ -1,44 +1,39 @@
 # =============================================================
-# SPA ROUTING - React Router (SD Negeri 1 Mulyoagung)
-# Mencegah 404 saat refresh halaman React di Hostinger / Apache
+# SPA ROUTING - React Router
 # =============================================================
 <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteBase /
-
-    # Jangan rewrite jika request menuju folder backend (API & Uploads)
+    # Jangan rewrite jika request menuju file/folder yang ada atau ke backend
     RewriteCond %{REQUEST_URI} ^/backend/ [NC]
     RewriteRule ^ - [L]
-
-    # Jangan rewrite jika request ke file atau direktori fisik yang benar-benar ada
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
-
-    # Redirect semua route SPA ke index.html
     RewriteRule ^ index.html [QSA,L]
 </IfModule>
 
 # =============================================================
-# PERFORMANCE & CACHING
+# PERFORMANCE - SD Negeri 1 Mulyoagung
+# Caching & kompresi aset statis (Vite build + uploads)
 # =============================================================
 
-# Kompresi Gzip/Deflate
+# Kompresi teks
 <IfModule mod_deflate.c>
     AddOutputFilterByType DEFLATE text/html text/plain text/css text/xml application/javascript application/json image/svg+xml
 </IfModule>
 
-# Browser Caching
+# Caching browser
 <IfModule mod_expires.c>
     ExpiresActive On
     ExpiresDefault "access plus 1 hour"
 
-    # Assets Vite dengan hashing (JS/CSS)
+    # Aset Vite (nama file ber-hash -> immutable, cache lama)
     <FilesMatch "\.(js|css)$">
         ExpiresByType application/javascript "access plus 1 year"
         ExpiresByType text/css "access plus 1 year"
     </FilesMatch>
 
-    # Gambar & Aset Media
+    # Gambar stabil
     <FilesMatch "\.(png|jpe?g|gif|webp|svg|ico)$">
         ExpiresByType image/png "access plus 1 month"
         ExpiresByType image/jpeg "access plus 1 month"
@@ -50,6 +45,7 @@
 </IfModule>
 
 <IfModule mod_headers.c>
+    # File ber-hash tidak perlu divalidasi ulang setiap load
     <FilesMatch "\.(js|css)$">
         Header set Cache-Control "public, max-age=31536000, immutable"
     </FilesMatch>
