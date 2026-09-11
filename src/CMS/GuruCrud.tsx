@@ -34,7 +34,7 @@ export default function GuruCrud() {
   const [confirmState, setConfirmState] = useState<ConfirmState>({
     isOpen: false,
     variant: 'delete',
-    onConfirm: () => {},
+    onConfirm: () => { },
   });
 
   // Form states

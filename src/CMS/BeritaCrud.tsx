@@ -38,7 +38,7 @@ export default function BeritaCrud({ currentUser }: BeritaCrudProps) {
   const [confirmState, setConfirmState] = useState<ConfirmState>({
     isOpen: false,
     variant: 'delete',
-    onConfirm: () => {},
+    onConfirm: () => { },
   });
 
   // Form states
@@ -252,17 +252,15 @@ export default function BeritaCrud({ currentUser }: BeritaCrudProps) {
             <button
               key={tab.key}
               onClick={() => setFilter('status_verifikasi', tab.key)}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer ${
-                isActive
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer ${isActive
                   ? tab.activeColor || 'bg-gradient-to-r from-teal-600 to-emerald-600 text-white shadow-sm'
                   : 'text-slate-600 hover:bg-slate-100'
-              }`}
+                }`}
             >
               <span>{tab.label}</span>
               <span
-                className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                  isActive ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-700'
-                }`}
+                className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${isActive ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-700'
+                  }`}
               >
                 {tab.count}
               </span>

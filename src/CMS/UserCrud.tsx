@@ -33,7 +33,7 @@ export default function UserCrud({ currentUser, onUpdateCurrentUser }: UserCrudP
   const [confirmState, setConfirmState] = useState<ConfirmState>({
     isOpen: false,
     variant: 'delete',
-    onConfirm: () => {},
+    onConfirm: () => { },
   });
 
   // Self Update form states

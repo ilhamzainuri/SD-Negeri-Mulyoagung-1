@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Users, GraduationCap, Award, CheckCircle2 } from 'lucide-react';
-import { getApiBaseUrl } from '../config/api'; 
+import { API_BASE_URL } from '../config/api';
 
 // 1. Definisikan tipe data
 interface StatData {
@@ -22,9 +22,9 @@ const AnimatedCounter: React.FC<{ value: string | number }> = ({ value }) => {
   const strValue = String(value);
   const match = strValue.match(/^([^\d]*)([\d.,]+)([^\d]*)$/);
   const prefix = match ? match[1] : '';
-  const numStr = match ? match[2].replace(/[.,]/g, '') : '0'; 
+  const numStr = match ? match[2].replace(/[.,]/g, '') : '0';
   const suffix = match ? match[3] : '';
-  
+
   const target = parseInt(numStr, 10) || 0;
 
   // Mendeteksi apakah angka sudah terlihat di layar (Scroll)
@@ -53,10 +53,10 @@ const AnimatedCounter: React.FC<{ value: string | number }> = ({ value }) => {
     const updateCount = (currentTime: number) => {
       const elapsedTime = currentTime - startTime;
       const progress = Math.min(elapsedTime / duration, 1);
-      
+
       // Efek Ease-Out (Kencang di awal, lambat di akhir)
       const ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
-      
+
       setCount(Math.floor(ease * target));
 
       if (progress < 1) {
@@ -94,13 +94,13 @@ export const Stats: React.FC = () => {
     const fetchStats = async () => {
       try {
         const [responseStats, responseGuru] = await Promise.all([
-          fetch(`${getApiBaseUrl()}/backend/API/statistik.php`),
-          fetch(`${getApiBaseUrl()}/backend/API/guru.php`) 
+          fetch(`${API_BASE_URL}/backend/API/statistik.php`),
+          fetch(`${API_BASE_URL}/backend/API/guru.php`)
         ]);
 
         const resultStats = await responseStats.json();
         const resultGuru = await responseGuru.json();
-        
+
         let combinedStats: StatData[] = [];
 
         if (resultStats.status === 'success') {
@@ -108,12 +108,12 @@ export const Stats: React.FC = () => {
         }
 
         if (resultGuru.status === 'success') {
-          const totalGuru = resultGuru.data.length; 
-          
+          const totalGuru = resultGuru.data.length;
+
           combinedStats.push({
-            id: 9999, 
-            judul: "Total", 
-            jumlah: totalGuru.toString(), 
+            id: 9999,
+            judul: "Total",
+            jumlah: totalGuru.toString(),
             label: "Guru & Tendik"
           });
         }
@@ -158,7 +158,7 @@ export const Stats: React.FC = () => {
       return { icon: 'Award', bgClass: 'bg-amber-100', colorClass: 'text-amber-600' };
     }
     if (text.includes('guru') || text.includes('tendik') || text.includes('staff') || text.includes('pengajar')) {
-      return { icon: 'Users', bgClass: 'bg-teal-100', colorClass: 'text-teal-600' }; 
+      return { icon: 'Users', bgClass: 'bg-teal-100', colorClass: 'text-teal-600' };
     }
     if (text.includes('fasilitas') || text.includes('kelas') || text.includes('ruang') || text.includes('ekstra')) {
       return { icon: 'CheckCircle2', bgClass: 'bg-indigo-100', colorClass: 'text-indigo-600' };
@@ -186,7 +186,7 @@ export const Stats: React.FC = () => {
         ) : (
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 text-center relative z-10">
             {stats.map((stat) => {
-              const style = getStyleByJudul(stat.judul, stat.label); 
+              const style = getStyleByJudul(stat.judul, stat.label);
 
               return (
                 <div

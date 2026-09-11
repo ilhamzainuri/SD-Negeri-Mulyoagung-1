@@ -16,7 +16,7 @@ import {
   Sparkles,
   Layers,
 } from 'lucide-react';
-import { getApiBaseUrl, getImageUrl } from '../config/api';
+import { API_BASE_URL, getImageUrl } from '../config/api';
 import { Pagination } from './common/Pagination';
 import { useDebounce } from '../hooks/useDebounce';
 import { SCHOOL_FACILITIES } from '../data/schoolData';
@@ -62,7 +62,7 @@ export const FasilitasSection: React.FC<FasilitasSectionProps> = ({
     const fetchFacilities = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`${getApiBaseUrl()}/backend/API/fasilitas.php`);
+        const res = await fetch(`${API_BASE_URL}/backend/API/fasilitas.php`);
         const json = await res.json();
         if (json.status === 'success' && Array.isArray(json.data) && json.data.length > 0) {
           setFacilities(json.data);
@@ -348,7 +348,7 @@ export const FasilitasSection: React.FC<FasilitasSectionProps> = ({
                     selectedFacility.foto
                       ? getImageUrl(selectedFacility.foto)
                       : selectedFacility.image ||
-                        'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&q=80&w=600'
+                      'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&q=80&w=600'
                   }
                   alt={selectedFacility.judul}
                   className="w-full h-full object-cover"

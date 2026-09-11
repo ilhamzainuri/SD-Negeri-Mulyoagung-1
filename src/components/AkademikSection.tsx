@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ExternalLink, BookOpen, ArrowLeft, Layers, ShieldCheck, Sparkles, LayoutGrid, List, Share2, Check } from 'lucide-react';
 import { AkademikMenuItem } from '../types';
-import { getApiBaseUrl } from '../config/api';
+import { API_BASE_URL } from '../config/api';
 import { getGoogleDriveEmbedUrl, DriveViewMode } from '../utils/helpers';
 import { ModulPembelajaranSection } from './ModulPembelajaranSection';
 
@@ -18,7 +18,7 @@ export const AkademikSection: React.FC = () => {
     const fetchMenu = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`${getApiBaseUrl()}/backend/API/akademik_menu.php`);
+        const res = await fetch(`${API_BASE_URL}/akademik_menu.php`);
         const json = await res.json();
         if (json.status === 'success' && Array.isArray(json.data)) {
           setItems(json.data);
@@ -72,7 +72,7 @@ export const AkademikSection: React.FC = () => {
       navigator.share({
         title: `${selectedItem.label} - Akademik SDN 1 Mulyoagung`,
         url: window.location.href,
-      }).catch(() => {});
+      }).catch(() => { });
     } else {
       navigator.clipboard.writeText(window.location.href);
       setCopied(true);
@@ -100,7 +100,7 @@ export const AkademikSection: React.FC = () => {
 
       {/* Main Container Card - Title & Description on top, Drive viewer below */}
       <main className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 -mt-8 relative z-20 pb-16 space-y-12">
-        
+
         {/* Jika tipe Modul Ajar & LKPD, render modul pembelajaran section full-width di atas */}
         {isModulType && (
           <div className="w-full">

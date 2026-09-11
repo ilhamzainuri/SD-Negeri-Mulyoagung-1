@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { getApiBaseUrl } from '../config/api';
+import { API_BASE_URL } from '../config/api';
 
 export const ModulRedirect: React.FC = () => {
   const navigate = useNavigate();
@@ -10,7 +10,7 @@ export const ModulRedirect: React.FC = () => {
     let cancelled = false;
     const resolve = async () => {
       try {
-        const res = await fetch(`${getApiBaseUrl()}/backend/API/akademik_menu.php`);
+        const res = await fetch(`${API_BASE_URL}/backend/API/akademik_menu.php`);
         const json = await res.json();
         if (cancelled) return;
         const modulItem = json.status === 'success' && Array.isArray(json.data)

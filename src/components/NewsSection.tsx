@@ -4,7 +4,7 @@ import { NEWS_ARTICLES } from '../data/schoolData';
 import { Article } from '../types';
 import { NewsDetailModal } from './NewsDetailModal';
 import { Pagination } from './common/Pagination';
-import { getApiBaseUrl, getImageUrl } from '../config/api';
+import { API_BASE_URL, getImageUrl } from '../config/api';
 import { useHomepageConfig } from '../hooks/useHomepageConfig';
 import { useDebounce } from '../hooks/useDebounce';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -62,7 +62,7 @@ export const NewsSection: React.FC<NewsSectionProps> = () => {
 
     const loadNews = async () => {
       try {
-        const response = await fetch(`${getApiBaseUrl()}/backend/API/newsAPI.php`);
+        const response = await fetch(`${API_BASE_URL}/backend/API/newsAPI.php`);
         const result = await response.json();
         if (result.status === 'success' && result.data && result.data.length > 0) {
           const mapped: Article[] = result.data.map((art: any) => {
@@ -241,8 +241,8 @@ export const NewsSection: React.FC<NewsSectionProps> = () => {
               key={cat}
               onClick={() => setSelectedCategory(cat)}
               className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-[10px] sm:text-xs font-semibold transition-all cursor-pointer ${selectedCategory === cat
-                  ? 'bg-[#1E3A8A] text-white shadow-sm'
-                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                ? 'bg-[#1E3A8A] text-white shadow-sm'
+                : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                 }`}
             >
               {cat}
@@ -257,10 +257,10 @@ export const NewsSection: React.FC<NewsSectionProps> = () => {
               key={article.id}
               onClick={() => setActiveArticle(article)}
               className={`group bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md hover:border-teal-200/80 transition-all duration-300 overflow-hidden flex flex-col justify-between cursor-pointer hover:-translate-y-1 ${article.category === 'Prestasi'
-                  ? 'border-t-[3px] sm:border-t-4 border-t-[#F9A825]'
-                  : article.category === 'Pengumuman'
-                    ? 'border-t-[3px] sm:border-t-4 border-t-blue-600'
-                    : 'border-t-[3px] sm:border-t-4 border-t-[#028C84]'
+                ? 'border-t-[3px] sm:border-t-4 border-t-[#F9A825]'
+                : article.category === 'Pengumuman'
+                  ? 'border-t-[3px] sm:border-t-4 border-t-blue-600'
+                  : 'border-t-[3px] sm:border-t-4 border-t-[#028C84]'
                 }`}
             >
               <div>
@@ -274,10 +274,10 @@ export const NewsSection: React.FC<NewsSectionProps> = () => {
                   />
                   <span
                     className={`absolute bottom-3 right-3 text-white px-2.5 py-1 rounded-full text-xs font-medium shadow-sm backdrop-blur-md ${article.category === 'Prestasi'
-                        ? 'bg-amber-500/90'
-                        : article.category === 'Pengumuman'
-                          ? 'bg-blue-600/90'
-                          : 'bg-[#028C84]/90'
+                      ? 'bg-amber-500/90'
+                      : article.category === 'Pengumuman'
+                        ? 'bg-blue-600/90'
+                        : 'bg-[#028C84]/90'
                       }`}
                   >
                     {article.category}

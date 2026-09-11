@@ -30,7 +30,7 @@ import {
   XCircle,
   HelpCircle,
 } from 'lucide-react';
-import { getApiBaseUrl, getImageUrl } from '../../config/api';
+import { API_BASE_URL, getImageUrl } from '../../config/api';
 import { UserSession, CmsTab } from '../types';
 
 interface CmsGlobalSearchModalProps {
@@ -317,7 +317,7 @@ export const CmsGlobalSearchModal: React.FC<CmsGlobalSearchModalProps> = ({
       setLoading(true);
       try {
         const res = await fetch(
-          `${getApiBaseUrl()}/backend/API/search.php?q=${encodeURIComponent(debouncedQuery.trim())}&status=all&cms=1`
+          `${API_BASE_URL}/backend/API/search.php?q=${encodeURIComponent(debouncedQuery.trim())}&status=all&cms=1`
         );
         const json = await res.json();
         if (isMounted && json.status === 'success' && json.data) {
@@ -435,11 +435,10 @@ export const CmsGlobalSearchModal: React.FC<CmsGlobalSearchModalProps> = ({
         )}
         {statusDoc && (
           <span
-            className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-              statusDoc === 'Published'
+            className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${statusDoc === 'Published'
                 ? 'bg-teal-100 text-teal-800'
                 : 'bg-slate-200 text-slate-700'
-            }`}
+              }`}
           >
             {statusDoc}
           </span>
@@ -519,18 +518,16 @@ export const CmsGlobalSearchModal: React.FC<CmsGlobalSearchModalProps> = ({
                 <button
                   key={cat.key}
                   onClick={() => setActiveCategory(cat.key as CmsSearchCategory)}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all whitespace-nowrap cursor-pointer ${
-                    isActive
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all whitespace-nowrap cursor-pointer ${isActive
                       ? 'bg-teal-600 text-white shadow-sm'
                       : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'
-                  }`}
+                    }`}
                 >
                   {Icon && <Icon size={12} className="shrink-0" />}
                   <span>{cat.label}</span>
                   <span
-                    className={`px-1.5 py-0.2 rounded-full text-[10px] font-bold ${
-                      isActive ? 'bg-white/20 text-white' : 'bg-slate-800 text-slate-400'
-                    }`}
+                    className={`px-1.5 py-0.2 rounded-full text-[10px] font-bold ${isActive ? 'bg-white/20 text-white' : 'bg-slate-800 text-slate-400'
+                      }`}
                   >
                     {cat.count}
                   </span>

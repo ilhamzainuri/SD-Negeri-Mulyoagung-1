@@ -1,4 +1,18 @@
 # =============================================================
+# SPA ROUTING - React Router
+# =============================================================
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+    # Jangan rewrite jika request menuju file/folder yang ada atau ke backend
+    RewriteCond %{REQUEST_URI} ^/backend/ [NC]
+    RewriteRule ^ - [L]
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^ index.html [QSA,L]
+</IfModule>
+
+# =============================================================
 # PERFORMANCE - SD Negeri 1 Mulyoagung
 # Caching & kompresi aset statis (Vite build + uploads)
 # =============================================================

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { X, ExternalLink } from 'lucide-react';
-import { getApiBaseUrl, getImageUrl } from '../config/api';
+import { API_BASE_URL, getImageUrl } from '../config/api';
 
 export const AnnouncementPopup: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -45,11 +45,11 @@ export const AnnouncementPopup: React.FC = () => {
   useEffect(() => {
     const fetchAnnouncement = async () => {
       try {
-        const response = await fetch(`${getApiBaseUrl()}/backend/API/pengumuman.php`);
+        const response = await fetch(`${API_BASE_URL}/backend/API/pengumuman.php`);
         const result = await response.json();
         if (result.status === 'success' && result.data) {
-          const isActivePublic = result.data.public_active !== undefined 
-            ? parseInt(result.data.public_active) === 1 
+          const isActivePublic = result.data.public_active !== undefined
+            ? parseInt(result.data.public_active) === 1
             : parseInt(result.data.is_active) === 1;
 
           const config = {
@@ -94,14 +94,14 @@ export const AnnouncementPopup: React.FC = () => {
   return createPortal(
     <div className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-4 md:p-6 overflow-y-auto overscroll-contain">
       {/* Backdrop */}
-      <div 
+      <div
         className="fixed inset-0 bg-slate-900/60 backdrop-blur-md transition-opacity duration-300"
         onClick={handleClose}
       />
 
       {/* Modal Card Pengumuman */}
       <div className="relative bg-white rounded-3xl md:rounded-[2.5rem] shadow-2xl border border-slate-100 max-w-md sm:max-w-xl md:max-w-2xl lg:max-w-3xl w-full max-h-[88vh] overflow-hidden transform transition-all duration-300 flex flex-col md:flex-row z-10 animate-in fade-in zoom-in-95 my-auto">
-        
+
         {/* Close Button Top Right */}
         <button
           onClick={handleClose}
@@ -115,10 +115,10 @@ export const AnnouncementPopup: React.FC = () => {
         {data.show_photo && photoSrc && (
           <div className="md:w-1/2 p-4 sm:p-5 bg-gradient-to-br from-slate-50 via-teal-50/20 to-slate-50 flex items-center justify-center shrink-0 border-b md:border-b-0 md:border-r border-slate-100/80">
             {data.photo_link ? (
-              <a 
-                href={data.photo_link} 
-                target="_blank" 
-                rel="noopener noreferrer" 
+              <a
+                href={data.photo_link}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-full flex items-center justify-center group relative overflow-hidden rounded-2xl"
               >
                 <img
@@ -153,7 +153,7 @@ export const AnnouncementPopup: React.FC = () => {
             <h2 className="text-lg sm:text-xl md:text-2xl font-extrabold text-slate-800 tracking-tight leading-snug">
               {data.judul}
             </h2>
-            <div 
+            <div
               className="text-slate-600 text-xs sm:text-sm leading-relaxed prose prose-slate max-w-none break-words"
               dangerouslySetInnerHTML={{ __html: data.isi }}
             />

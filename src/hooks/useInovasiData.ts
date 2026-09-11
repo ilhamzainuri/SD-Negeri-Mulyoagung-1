@@ -1,8 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { getApiBaseUrl } from '../config/api';
+import { API_BASE_URL } from '../config/api';
 import { InovasiItem } from '../types';
-
-const API_BASE = getApiBaseUrl();
 
 export function useInovasiData() {
   const [inovasiList, setInovasiList] = useState<InovasiItem[]>([]);
@@ -12,7 +10,7 @@ export function useInovasiData() {
   const fetchInovasi = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${API_BASE}/backend/API/inovasi.php?_t=${Date.now()}`);
+      const res = await fetch(`${API_BASE_URL}/inovasi.php?_t=${Date.now()}`);
       const result = await res.json();
       if (result.status === 'success') {
         setInovasiList(result.data || []);
@@ -42,7 +40,7 @@ export function useInovasiDetail(id: string | number | undefined) {
     if (!id) return;
     setLoading(true);
     try {
-      const res = await fetch(`${API_BASE}/backend/API/inovasi.php?id=${id}&_t=${Date.now()}`);
+      const res = await fetch(`${API_BASE_URL}/inovasi.php?id=${id}&_t=${Date.now()}`);
       const result = await res.json();
       if (result.status === 'success') {
         setInovasi(result.data || null);

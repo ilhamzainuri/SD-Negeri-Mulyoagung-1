@@ -28,14 +28,6 @@ Order Allow,Deny
 Deny from all
 </FilesMatch>
 
-# Izinkan akses dari localhost (XAMPP development)
+# Izinkan akses API (Proteksi endpoint ditangani oleh CORS & Sec-Fetch-Mode di koneksi.php)
+Require all granted
 
-# Untuk produksi: hapus/sesuaikan bagian ini
-
-<RequireAny>
-    Require ip 127.0.0.1
-    Require ip ::1
-    Require ip 192.168
-    Require ip 10.
-    # Require ip xx.xx.xx.xx  (IP server produksi jika diperlukan)
-</RequireAny>

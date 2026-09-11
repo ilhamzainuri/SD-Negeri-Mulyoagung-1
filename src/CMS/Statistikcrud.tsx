@@ -26,7 +26,7 @@ export default function StatistikCrud({ currentUser }: StatistikCrudProps) {
   const [confirmState, setConfirmState] = useState<ConfirmState>({
     isOpen: false,
     variant: 'delete',
-    onConfirm: () => {},
+    onConfirm: () => { },
   });
 
   // Form states

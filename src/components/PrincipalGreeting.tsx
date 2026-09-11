@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { PRINCIPAL_INFO } from '../data/schoolData';
 import { Quote } from 'lucide-react';
-import { getApiBaseUrl, getImageUrl } from '../config/api';
+import { API_BASE_URL, getImageUrl } from '../config/api';
 
 export const PrincipalGreeting: React.FC = () => {
   const [data, setData] = useState({
@@ -13,7 +13,7 @@ export const PrincipalGreeting: React.FC = () => {
   useEffect(() => {
     const fetchGreeting = async () => {
       try {
-        const response = await fetch(`${getApiBaseUrl()}/backend/API/sambutan.php`);
+        const response = await fetch(`${API_BASE_URL}/backend/API/sambutan.php`);
         const result = await response.json();
         if (result.status === 'success' && result.data) {
           setData({
@@ -32,7 +32,7 @@ export const PrincipalGreeting: React.FC = () => {
   return (
     // Padding Y (atas-bawah) diperkecil di mobile (py-8)
     <section className="relative bg-[#FAFAFA] py-8 sm:py-12 overflow-hidden">
-  
+
       {/* --- Background Orbs --- */}
       <div className="absolute top-0 left-1/4 w-72 h-72 sm:w-96 sm:h-96 bg-blue-100/60 rounded-full mix-blend-multiply filter blur-3xl opacity-70"></div>
       <div className="absolute top-10 right-1/4 w-72 h-72 sm:w-96 sm:h-96 bg-teal-100/40 rounded-full mix-blend-multiply filter blur-3xl opacity-70"></div>
@@ -42,13 +42,13 @@ export const PrincipalGreeting: React.FC = () => {
         {/* --- CARD LIQUID GLASS APPLE --- */}
         {/* Padding card diturunkan dari p-6 ke p-5, border-radius di-adjust ke rounded-3xl untuk mobile */}
         <div className="bg-white/40 backdrop-blur-2xl backdrop-saturate-150 border border-white/90 shadow-[0_8px_40px_-12px_rgba(0,0,0,0.1),inset_0_1px_2px_rgba(255,255,255,1),inset_0_-1px_1px_rgba(0,0,0,0.05)] rounded-3xl sm:rounded-[2.5rem] p-5 sm:p-10 lg:p-12 relative overflow-hidden transition-all duration-300">
-          
+
           {/* Specular Gloss Reflection */}
           <div className="absolute top-0 left-0 right-0 h-20 sm:h-28 bg-gradient-to-b from-white/70 via-white/10 to-transparent pointer-events-none rounded-t-3xl sm:rounded-t-[2.5rem]" />
 
           {/* Jarak antar elemen (gap) dirapatkan di mobile */}
           <div className="flex flex-col lg:flex-row gap-5 sm:gap-8 lg:gap-12 items-center relative z-10">
-            
+
             {/* Principal Image */}
             <div className="lg:w-1/3 flex flex-col items-center justify-center shrink-0">
               {/* Frame foto diperkecil sangat signifikan di mobile (w-28 h-28) agar tidak memakan tinggi */}
@@ -86,7 +86,7 @@ export const PrincipalGreeting: React.FC = () => {
               {/* Padding dalam kotak pesan diturunkan (p-4), border pinggir disesuaikan */}
               <div className="relative pl-4 sm:pl-6 p-3.5 sm:p-6 rounded-xl sm:rounded-2xl bg-white/40 backdrop-blur-md border border-white/70 shadow-[inset_0_2px_10px_rgba(255,255,255,0.5),0_4px_15px_-5px_rgba(0,0,0,0.05)]">
                 <div className="absolute left-0 top-0 bottom-0 w-1 sm:w-1.5 bg-gradient-to-b from-slate-400 to-slate-200 rounded-l-xl sm:rounded-l-2xl opacity-80"></div>
-                <div 
+                <div
                   className="text-slate-700 text-xs sm:text-lg leading-relaxed font-medium text-center lg:text-left prose prose-slate max-w-none break-words"
                   dangerouslySetInnerHTML={{ __html: data.greeting }}
                 />
@@ -102,7 +102,7 @@ export const PrincipalGreeting: React.FC = () => {
                 </span>
               </div>
             </div>
-            
+
           </div>
         </div>
       </div>

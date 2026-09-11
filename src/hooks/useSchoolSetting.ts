@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getApiBaseUrl } from '../config/api';
+import { API_BASE_URL } from '../config/api';
 
 export interface SocialMediaItem {
   id: string;
@@ -43,7 +43,7 @@ export const useSchoolSettings = (): SchoolSettings => {
   useEffect(() => {
     const fetchSettings = async () => {
       try {
-        const response = await fetch(`${getApiBaseUrl()}/backend/API/pengaturan.php`);
+        const response = await fetch(`${API_BASE_URL}/pengaturan.php`);
         const result = await response.json();
 
         if (result.status === 'success') {

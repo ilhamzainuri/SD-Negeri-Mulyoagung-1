@@ -149,10 +149,10 @@ export default function Verifikasi() {
     activeSubTab === 'berita'
       ? newsFilter
       : activeSubTab === 'galeri'
-      ? galleryFilter
-      : activeSubTab === 'modul'
-      ? modulFilter
-      : inovasiFilter;
+        ? galleryFilter
+        : activeSubTab === 'modul'
+          ? modulFilter
+          : inovasiFilter;
 
   // Reset page when tab or search/filter changes
   useEffect(() => {
@@ -176,10 +176,10 @@ export default function Verifikasi() {
     activeSubTab === 'berita'
       ? getUniqueValues(pendingNews, 'kategori')
       : activeSubTab === 'galeri'
-      ? getUniqueValues(pendingGallery, 'kategori')
-      : activeSubTab === 'modul'
-      ? getUniqueValues(pendingModules, 'kategori')
-      : getUniqueValues(pendingInovasi, 'kategori');
+        ? getUniqueValues(pendingGallery, 'kategori')
+        : activeSubTab === 'modul'
+          ? getUniqueValues(pendingModules, 'kategori')
+          : getUniqueValues(pendingInovasi, 'kategori');
 
   const handleVerifyNews = async (id: number, decision: 'Verified' | 'Rejected') => {
     setError('');
@@ -299,9 +299,8 @@ export default function Verifikasi() {
               setActiveSubTab('berita');
               activeFilter.resetFilter();
             }}
-            className={`pb-3 font-semibold text-xs sm:text-sm transition-all relative cursor-pointer whitespace-nowrap ${
-              activeSubTab === 'berita' ? 'text-teal-600 font-bold' : 'text-slate-400 hover:text-slate-600'
-            }`}
+            className={`pb-3 font-semibold text-xs sm:text-sm transition-all relative cursor-pointer whitespace-nowrap ${activeSubTab === 'berita' ? 'text-teal-600 font-bold' : 'text-slate-400 hover:text-slate-600'
+              }`}
           >
             Antrean Berita ({pendingNews.length})
             {activeSubTab === 'berita' && (
@@ -313,9 +312,8 @@ export default function Verifikasi() {
               setActiveSubTab('galeri');
               activeFilter.resetFilter();
             }}
-            className={`pb-3 font-semibold text-xs sm:text-sm transition-all relative cursor-pointer whitespace-nowrap ${
-              activeSubTab === 'galeri' ? 'text-teal-600 font-bold' : 'text-slate-400 hover:text-slate-600'
-            }`}
+            className={`pb-3 font-semibold text-xs sm:text-sm transition-all relative cursor-pointer whitespace-nowrap ${activeSubTab === 'galeri' ? 'text-teal-600 font-bold' : 'text-slate-400 hover:text-slate-600'
+              }`}
           >
             Antrean Galeri ({pendingGallery.length})
             {activeSubTab === 'galeri' && (
@@ -327,9 +325,8 @@ export default function Verifikasi() {
               setActiveSubTab('modul');
               activeFilter.resetFilter();
             }}
-            className={`pb-3 font-semibold text-xs sm:text-sm transition-all relative cursor-pointer whitespace-nowrap ${
-              activeSubTab === 'modul' ? 'text-teal-600 font-bold' : 'text-slate-400 hover:text-slate-600'
-            }`}
+            className={`pb-3 font-semibold text-xs sm:text-sm transition-all relative cursor-pointer whitespace-nowrap ${activeSubTab === 'modul' ? 'text-teal-600 font-bold' : 'text-slate-400 hover:text-slate-600'
+              }`}
           >
             Antrean Modul ({pendingModules.length})
             {activeSubTab === 'modul' && (
@@ -341,9 +338,8 @@ export default function Verifikasi() {
               setActiveSubTab('inovasi');
               activeFilter.resetFilter();
             }}
-            className={`pb-3 font-semibold text-xs sm:text-sm transition-all relative cursor-pointer whitespace-nowrap ${
-              activeSubTab === 'inovasi' ? 'text-teal-600 font-bold' : 'text-slate-400 hover:text-slate-600'
-            }`}
+            className={`pb-3 font-semibold text-xs sm:text-sm transition-all relative cursor-pointer whitespace-nowrap ${activeSubTab === 'inovasi' ? 'text-teal-600 font-bold' : 'text-slate-400 hover:text-slate-600'
+              }`}
           >
             Antrean Inovasi ({pendingInovasi.length})
             {activeSubTab === 'inovasi' && (

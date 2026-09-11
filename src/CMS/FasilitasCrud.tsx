@@ -66,7 +66,7 @@ export default function FasilitasCrud({ currentUser }: FasilitasCrudProps) {
   const [confirmState, setConfirmState] = useState<ConfirmState>({
     isOpen: false,
     variant: 'delete',
-    onConfirm: () => {},
+    onConfirm: () => { },
   });
 
   // Modal & Form States

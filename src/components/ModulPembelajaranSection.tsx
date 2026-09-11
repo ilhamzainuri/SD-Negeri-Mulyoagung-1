@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { BookOpen, Search, Filter, Download, ExternalLink, Eye, RotateCcw, X, FileText, Calendar, Layers } from 'lucide-react';
-import { getApiBaseUrl, getImageUrl } from '../config/api';
+import { API_BASE_URL, getImageUrl } from '../config/api';
 import { Pagination } from './common/Pagination';
 import { ModulPreviewModal } from '../CMS/modul/ModulPreviewModal';
 import { ModulItem } from '../CMS/hooks/useModulData';
@@ -40,7 +40,7 @@ export const ModulPembelajaranSection: React.FC = () => {
     const fetchPublicModules = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`${getApiBaseUrl()}/backend/API/modul_pembelajaran.php`);
+        const res = await fetch(`${API_BASE_URL}/backend/API/modul_pembelajaran.php`);
         const json = await res.json();
         if (json.status === 'success' && Array.isArray(json.data)) {
           setModules(json.data);
@@ -140,7 +140,7 @@ export const ModulPembelajaranSection: React.FC = () => {
       <div className="absolute bottom-10 left-10 w-96 h-96 bg-emerald-100/30 rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 space-y-8 relative z-10">
-        
+
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto space-y-3">
           <div className="inline-flex items-center gap-2 text-[#028C84] font-bold text-xs uppercase tracking-wider bg-teal-50/80 border border-teal-200/80 px-4 py-1.5 rounded-full shadow-sm backdrop-blur-md">

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Mail, Phone } from 'lucide-react';
 import { useSchoolSettings } from '../../hooks/useSchoolSettings';
-import { getApiBaseUrl } from '../../config/api';
+import { API_BASE_URL } from '../../config/api';
 
 interface StatData {
   id: number;
@@ -17,7 +17,7 @@ export const TopContactStrip: React.FC = () => {
   useEffect(() => {
     const fetchAkreditasi = async () => {
       try {
-        const response = await fetch(`${getApiBaseUrl()}/backend/API/statistik.php`);
+        const response = await fetch(`${API_BASE_URL}/backend/API/statistik.php`);
         const result = await response.json();
 
         if (result.status === 'success' && Array.isArray(result.data)) {

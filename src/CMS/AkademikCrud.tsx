@@ -14,6 +14,8 @@ interface AkademikCrudProps {
   currentUser: UserSession;
 }
 
+const API_BASE = getApiBaseUrl();
+
 export default function AkademikCrud({ currentUser }: AkademikCrudProps) {
   const { items, loading, error, setError, fetchItems, deleteItem, reorderItems } = useAkademikData('all');
   const [toast, setToast] = useState<{ type: ToastType; text: string } | null>(null);
@@ -45,7 +47,7 @@ export default function AkademikCrud({ currentUser }: AkademikCrudProps) {
   const [confirmState, setConfirmState] = useState<ConfirmState>({
     isOpen: false,
     variant: 'delete',
-    onConfirm: () => {},
+    onConfirm: () => { },
   });
 
   const categories = getCategories(items);
@@ -73,7 +75,7 @@ export default function AkademikCrud({ currentUser }: AkademikCrudProps) {
     setDeskripsi('');
     setLinkGdrive('');
     setIsModul(false);
-    
+
     // Hitung urutan default berdasarkan jumlah item di kelompok yang dituju
     if (catId === null) {
       setUrutan(standaloneItems.length + 1);
@@ -126,7 +128,7 @@ export default function AkademikCrud({ currentUser }: AkademikCrudProps) {
     formData.append('role', currentUser.role);
 
     try {
-      const response = await fetch(`${getApiBaseUrl()}/backend/API/akademik_menu.php`, {
+      const response = await fetch(`${API_BASE}/backend/API/akademik_menu.php`, {
         method: 'POST',
         body: formData,
       });
@@ -360,11 +362,10 @@ export default function AkademikCrud({ currentUser }: AkademikCrudProps) {
           <div className="flex items-center bg-slate-100 p-1 rounded-2xl border border-slate-200/80 flex-1 sm:flex-initial justify-center sm:justify-start">
             <button
               onClick={() => setViewMode('list')}
-              className={`flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-3 py-2 sm:py-2.5 rounded-xl text-xs font-bold transition cursor-pointer ${
-                viewMode === 'list'
-                  ? 'bg-white text-teal-700 shadow-sm'
-                  : 'text-slate-500 hover:text-slate-800'
-              }`}
+              className={`flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-3 py-2 sm:py-2.5 rounded-xl text-xs font-bold transition cursor-pointer ${viewMode === 'list'
+                ? 'bg-white text-teal-700 shadow-sm'
+                : 'text-slate-500 hover:text-slate-800'
+                }`}
               title="Tampilan Vertikal Drag & Drop (Urutan & Kategori)"
             >
               <ListOrdered size={15} />
@@ -372,11 +373,10 @@ export default function AkademikCrud({ currentUser }: AkademikCrudProps) {
             </button>
             <button
               onClick={() => setViewMode('grid')}
-              className={`flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-3 py-2 sm:py-2.5 rounded-xl text-xs font-bold transition cursor-pointer ${
-                viewMode === 'grid'
-                  ? 'bg-white text-teal-700 shadow-sm'
-                  : 'text-slate-500 hover:text-slate-800'
-              }`}
+              className={`flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-3 py-2 sm:py-2.5 rounded-xl text-xs font-bold transition cursor-pointer ${viewMode === 'grid'
+                ? 'bg-white text-teal-700 shadow-sm'
+                : 'text-slate-500 hover:text-slate-800'
+                }`}
               title="Tampilan Kartu Grid"
             >
               <LayoutGrid size={15} />
@@ -455,11 +455,10 @@ export default function AkademikCrud({ currentUser }: AkademikCrudProps) {
                   handleDrop(e, null, dropIdx, dropPos);
                 }
               }}
-              className={`rounded-2xl border transition-all duration-200 overflow-hidden shadow-xs w-full ${
-                dragType === 'item' && dragOverTarget?.catId === null
-                  ? 'border-teal-400 ring-2 ring-teal-400/30 bg-teal-50/40'
-                  : 'border-teal-200/80 bg-teal-50/20'
-              }`}
+              className={`rounded-2xl border transition-all duration-200 overflow-hidden shadow-xs w-full ${dragType === 'item' && dragOverTarget?.catId === null
+                ? 'border-teal-400 ring-2 ring-teal-400/30 bg-teal-50/40'
+                : 'border-teal-200/80 bg-teal-50/20'
+                }`}
             >
               <div className="flex flex-wrap items-center justify-between gap-2.5 px-3.5 sm:px-4 py-3 bg-teal-50/80 border-b border-teal-100">
                 <div className="flex items-center gap-2 min-w-0 flex-1">
@@ -481,11 +480,10 @@ export default function AkademikCrud({ currentUser }: AkademikCrudProps) {
               <div className="p-2.5 sm:p-3 space-y-2">
                 {standaloneItems.length === 0 ? (
                   <div
-                    className={`py-6 px-4 text-center text-xs rounded-xl border border-dashed transition-colors ${
-                      dragType === 'item' && dragOverTarget?.catId === null
-                        ? 'border-teal-500 bg-teal-100/60 text-teal-800 font-semibold'
-                        : 'border-teal-200 text-teal-700/70'
-                    }`}
+                    className={`py-6 px-4 text-center text-xs rounded-xl border border-dashed transition-colors ${dragType === 'item' && dragOverTarget?.catId === null
+                      ? 'border-teal-500 bg-teal-100/60 text-teal-800 font-semibold'
+                      : 'border-teal-200 text-teal-700/70'
+                      }`}
                   >
                     Belum ada item mandiri. Seret item ke area ini untuk menjadikannya item mandiri.
                   </div>
@@ -508,11 +506,10 @@ export default function AkademikCrud({ currentUser }: AkademikCrudProps) {
                           onDragEnd={handleDragEnd}
                           onDragOver={(e) => handleDragOverItem(e, null, idx)}
                           onDrop={(e) => handleDrop(e, null, idx, dragOverTarget?.position || 'before')}
-                          className={`flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-3 p-2.5 sm:px-3.5 sm:py-2.5 rounded-xl border transition-all duration-150 bg-white ${
-                            isBeingDragged
-                              ? 'opacity-30 border-dashed border-teal-500 scale-[0.98]'
-                              : 'border-slate-200/90 shadow-2xs hover:border-teal-400 hover:shadow-xs'
-                          }`}
+                          className={`flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-3 p-2.5 sm:px-3.5 sm:py-2.5 rounded-xl border transition-all duration-150 bg-white ${isBeingDragged
+                            ? 'opacity-30 border-dashed border-teal-500 scale-[0.98]'
+                            : 'border-slate-200/90 shadow-2xs hover:border-teal-400 hover:shadow-xs'
+                            }`}
                         >
                           <div className="flex items-start sm:items-center gap-2 sm:gap-2.5 min-w-0 flex-1">
                             <div
@@ -534,11 +531,10 @@ export default function AkademikCrud({ currentUser }: AkademikCrudProps) {
                                 </span>
                               )}
                               <span
-                                className={`text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 shrink-0 ${
-                                  Number(item.aktif) === 1
-                                    ? 'bg-emerald-50 text-emerald-600 border border-emerald-200'
-                                    : 'bg-slate-100 text-slate-500 border border-slate-200'
-                                }`}
+                                className={`text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 shrink-0 ${Number(item.aktif) === 1
+                                  ? 'bg-emerald-50 text-emerald-600 border border-emerald-200'
+                                  : 'bg-slate-100 text-slate-500 border border-slate-200'
+                                  }`}
                               >
                                 {Number(item.aktif) === 1 ? 'Aktif' : 'Nonaktif'}
                               </span>
@@ -602,13 +598,12 @@ export default function AkademikCrud({ currentUser }: AkademikCrudProps) {
                         handleDrop(e, cat.item.id, dropIdx, dropPos);
                       }
                     }}
-                    className={`rounded-2xl border transition-all duration-200 overflow-hidden w-full ${
-                      isCatBeingDragged
-                        ? 'opacity-30 border-dashed border-amber-500'
-                        : isTargetCat && dragType === 'item'
+                    className={`rounded-2xl border transition-all duration-200 overflow-hidden w-full ${isCatBeingDragged
+                      ? 'opacity-30 border-dashed border-amber-500'
+                      : isTargetCat && dragType === 'item'
                         ? 'border-amber-400 ring-2 ring-amber-300/60 bg-amber-50/40'
                         : 'border-slate-200 bg-white'
-                    }`}
+                      }`}
                   >
                     {/* Kategori Header (bisa di-drag utk urut antar kategori) */}
                     <div
@@ -639,11 +634,10 @@ export default function AkademikCrud({ currentUser }: AkademikCrudProps) {
                       <div className="flex items-center justify-between sm:justify-end gap-2 shrink-0 pt-1 sm:pt-0 border-t sm:border-t-0 border-amber-100 pl-8 sm:pl-0">
                         <span className="text-[11px] text-slate-500">{cat.children.length} item</span>
                         <span
-                          className={`text-[11px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 ${
-                            Number(cat.item.aktif) === 1
-                              ? 'bg-emerald-50 text-emerald-600 border border-emerald-200'
-                              : 'bg-slate-100 text-slate-500 border border-slate-200'
-                          }`}
+                          className={`text-[11px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 ${Number(cat.item.aktif) === 1
+                            ? 'bg-emerald-50 text-emerald-600 border border-emerald-200'
+                            : 'bg-slate-100 text-slate-500 border border-slate-200'
+                            }`}
                         >
                           {Number(cat.item.aktif) === 1 ? <Eye size={11} /> : <EyeOff size={11} />}
                           {Number(cat.item.aktif) === 1 ? 'Aktif' : 'Nonaktif'}
@@ -666,11 +660,10 @@ export default function AkademikCrud({ currentUser }: AkademikCrudProps) {
                     <div className="p-2.5 sm:p-3 space-y-2">
                       {cat.children.length === 0 ? (
                         <div
-                          className={`py-5 px-4 rounded-xl border border-dashed text-xs text-center transition-colors ${
-                            isTargetCat && dragType === 'item'
-                              ? 'border-amber-500 bg-amber-100/60 text-amber-900 font-semibold'
-                              : 'border-slate-200 text-slate-400'
-                          }`}
+                          className={`py-5 px-4 rounded-xl border border-dashed text-xs text-center transition-colors ${isTargetCat && dragType === 'item'
+                            ? 'border-amber-500 bg-amber-100/60 text-amber-900 font-semibold'
+                            : 'border-slate-200 text-slate-400'
+                            }`}
                         >
                           Kosong — Seret item ke area ini untuk memasukkannya ke kategori {cat.item.label}
                         </div>
@@ -693,11 +686,10 @@ export default function AkademikCrud({ currentUser }: AkademikCrudProps) {
                                 onDragEnd={handleDragEnd}
                                 onDragOver={(e) => handleDragOverItem(e, cat.item.id, idx)}
                                 onDrop={(e) => handleDrop(e, cat.item.id, idx, dragOverTarget?.position || 'before')}
-                                className={`flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-3 p-2.5 sm:px-3.5 sm:py-2.5 rounded-xl border transition-all duration-150 ${
-                                  isChildBeingDragged
-                                    ? 'opacity-30 border-dashed border-teal-500 scale-[0.98]'
-                                    : 'border-slate-200 bg-slate-50/60 hover:bg-white hover:border-teal-300 hover:shadow-2xs'
-                                }`}
+                                className={`flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-3 p-2.5 sm:px-3.5 sm:py-2.5 rounded-xl border transition-all duration-150 ${isChildBeingDragged
+                                  ? 'opacity-30 border-dashed border-teal-500 scale-[0.98]'
+                                  : 'border-slate-200 bg-slate-50/60 hover:bg-white hover:border-teal-300 hover:shadow-2xs'
+                                  }`}
                               >
                                 <div className="flex items-start sm:items-center gap-2 sm:gap-2.5 min-w-0 flex-1">
                                   <div

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { TEACHERS_DIRECTORY } from '../data/schoolData';
 import { Teacher } from '../types';
-import { getApiBaseUrl, getImageUrl } from '../config/api';
+import { API_BASE_URL, getImageUrl } from '../config/api';
 
 /**
  * Mengambil data guru/tendik dari backend (guru.php).
@@ -21,7 +21,7 @@ export const useTeachersData = (): Teacher[] => {
 
     const loadTeachers = async () => {
       try {
-        const response = await fetch(`${getApiBaseUrl()}/backend/API/guru.php`);
+        const response = await fetch(`${API_BASE_URL}/backend/API/guru.php`);
         const result = await response.json();
 
         if (result.status === 'success' && result.data && result.data.length > 0) {

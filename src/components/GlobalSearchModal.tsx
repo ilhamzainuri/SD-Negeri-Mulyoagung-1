@@ -20,7 +20,7 @@ import {
   Mail,
   Layers,
 } from 'lucide-react';
-import { getApiBaseUrl, getImageUrl } from '../config/api';
+import { API_BASE_URL, getImageUrl } from '../config/api';
 import { NEWS_ARTICLES, GALLERY_ITEMS, TEACHERS_DIRECTORY, SCHOOL_FACILITIES } from '../data/schoolData';
 
 interface GlobalSearchModalProps {
@@ -220,14 +220,14 @@ export const GlobalSearchModal: React.FC<GlobalSearchModalProps> = ({ isOpen, on
     const fetchSearch = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`${getApiBaseUrl()}/backend/API/search.php?q=${encodeURIComponent(q)}`);
+        const res = await fetch(`${API_BASE_URL}/backend/API/search.php?q=${encodeURIComponent(q)}`);
         const json = await res.json();
         if (isMounted && json.status === 'success' && json.data) {
           const apiData = json.data;
-          
+
           // Filter local fallback data if API data for some entity is empty
           const lowerQ = q.toLowerCase();
-          
+
           let beritaList = apiData.berita || [];
           if (beritaList.length === 0) {
             beritaList = NEWS_ARTICLES.filter(
@@ -559,18 +559,16 @@ export const GlobalSearchModal: React.FC<GlobalSearchModalProps> = ({ isOpen, on
                   <button
                     key={tab.key}
                     onClick={() => setActiveTab(tab.key as SearchCategory)}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all whitespace-nowrap cursor-pointer ${
-                      isActive
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all whitespace-nowrap cursor-pointer ${isActive
                         ? 'bg-gradient-to-r from-teal-600 to-emerald-600 text-white shadow-sm'
                         : 'text-slate-600 hover:bg-slate-200/60'
-                    }`}
+                      }`}
                   >
                     {Icon && <Icon size={13} className="shrink-0" />}
                     <span>{tab.label}</span>
                     <span
-                      className={`px-1.5 py-0.2 rounded-full text-[10px] font-bold ${
-                        isActive ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-700'
-                      }`}
+                      className={`px-1.5 py-0.2 rounded-full text-[10px] font-bold ${isActive ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-700'
+                        }`}
                     >
                       {tab.count}
                     </span>
